@@ -17,33 +17,29 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
   bool CountingCharacterSequential::pre_processing() {
     internal_order_test();
     //инициализаци€ инпута
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-    
+    if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
+        input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+        input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+    }
+    else {
+        input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+        input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+    }
     // »нициализаци€ ответа
     ans = 0;
     return true;
   }
   bool CountingCharacterSequential::run() {
-      // спросить €вл€ютс€ считать ли повтор€ющиес€ символы как один или как несколько
     internal_order_test();
-    char tmp;
-    int count=0;
-    bool first = true;
     for (int i = 0; i < strlen(input[0]); i++) {
-      first = true;
-      tmp = input[0][i];
-      for (int j = 0; j < strlen(input[1]); j++) {
-        if (tmp == input[1][j]) {
-          count += 1;
-          if (first) {
-            count += 1;
-            first = false;
-          }
+      if (i < strlen(input[1])) {
+        if (input[0][i] != input[1][i]) {
+          ans += 2;
         }
+      } else {
+        ans += 1;
       }
     }
-    ans = (strlen(input[0]) + strlen(input[1])) - count;
     std::this_thread::sleep_for(20ms);
     return true;
   }

@@ -6,7 +6,7 @@
 #include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
 
 
-TEST(Sequential_count,ans_6){
+TEST(Sequential_count,ans_8){
     // Create data
 	char* str1 = new char[6];
 	char* str2 = new char[6];
@@ -29,7 +29,7 @@ TEST(Sequential_count,ans_6){
     testClass.pre_processing();
     testClass.run();
     testClass.post_processing();
-    ASSERT_EQ(6, out[0]);
+    ASSERT_EQ(8, out[0]);
       
 }
 
@@ -83,7 +83,7 @@ TEST(Sequential_count, ans_10) {
   testClass.post_processing();
   ASSERT_EQ(10, out[0]);
 }
-TEST(Sequential_count, ans_12) {
+TEST(Sequential_count, ans_11) {
   // Create data
   char* str1 = new char[7];
   char* str2 = new char[6];
@@ -106,5 +106,5 @@ TEST(Sequential_count, ans_12) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  ASSERT_EQ(9, out[0]);
+  ASSERT_EQ(11, out[0]);
 }
