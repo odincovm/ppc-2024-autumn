@@ -1,4 +1,4 @@
-
+п»ї
 #include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
 
 #include <thread>
@@ -9,14 +9,14 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
 
   bool CountingCharacterSequential::validation() {
     internal_order_test();
-    // Проверка на то, что у нас 2 строки на входе и одно число на выходе
+    // РџСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, С‡С‚Рѕ Сѓ РЅР°СЃ 2 СЃС‚СЂРѕРєРё РЅР° РІС…РѕРґРµ Рё РѕРґРЅРѕ С‡РёСЃР»Рѕ РЅР° РІС‹С…РѕРґРµ
     bool ans_out = (taskData->inputs_count[0] == 2);
     bool ans_in = (taskData->outputs_count[0] == 1);
     return (ans_in) && (ans_out);
   }
   bool CountingCharacterSequential::pre_processing() {
     internal_order_test();
-    //инициализация инпута
+    //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРЅРїСѓС‚Р°
     if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
         input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
         input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
@@ -25,7 +25,7 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
         input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
         input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
     }
-    // Инициализация ответа
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РѕС‚РІРµС‚Р°
     ans = 0;
     return true;
   }
@@ -40,7 +40,6 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
         ans += 1;
       }
     }
-    std::this_thread::sleep_for(20ms);
     return true;
   }
   bool CountingCharacterSequential::post_processing() {
