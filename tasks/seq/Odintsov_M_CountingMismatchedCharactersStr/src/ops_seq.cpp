@@ -5,8 +5,7 @@
 
 using namespace std::chrono_literals;
 
-using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
-
+using namespace Odintsov_M_CountingMismatchedCharactersStr_seq {
   bool CountingCharacterSequential::validation() {
     internal_order_test();
     // Проверка на то, что у нас 2 строки на входе и одно число на выходе
@@ -16,14 +15,13 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
   }
   bool CountingCharacterSequential::pre_processing() {
     internal_order_test();
-    //инициализация инпута
+    // инициализация инпута
     if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
-        input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
-        input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-    }
-    else {
-        input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-        input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+      input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+      input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+    } else {
+      input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+      input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
     }
     // Инициализация ответа
     ans = 0;
@@ -47,8 +45,4 @@ using namespace Odintsov_M_CountingMismatchedCharactersStr_seq;
     reinterpret_cast<int*>(taskData->outputs[0])[0] = ans;
     return true;
   }
-
-  
-
-
-
+}

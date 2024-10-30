@@ -5,32 +5,30 @@
 
 #include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
 
+TEST(Sequential_count, ans_8) {
+  // Create data
+  char* str1 = new char[6];
+  char* str2 = new char[6];
+  strcpy_s(str1, 6, "qwert");
+  strcpy_s(str2, 6, "qello");
+  std::vector<char*> in{str1, str2};
+  std::vector<int> out(1, 1);
 
-TEST(Sequential_count,ans_8){
-    // Create data
-	char* str1 = new char[6];
-	char* str2 = new char[6];
-    strcpy_s(str1,6,"qwert");
-    strcpy_s(str2, 6, "qello");
-    std::vector<char*> in{str1, str2};
-    std::vector<int> out(1, 1);
-   
-	// Create TaskData
-	std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
-    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
-    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
-	taskDataSeq->inputs_count.emplace_back(in.size());
-	taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t *>(out.data()));
-	taskDataSeq->outputs_count.emplace_back(out.size());
+  // Create TaskData
+  std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
+  taskDataSeq->inputs_count.emplace_back(in.size());
+  taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
+  taskDataSeq->outputs_count.emplace_back(out.size());
 
-	// Create Task
-	Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential testClass(taskDataSeq);
-	ASSERT_EQ(testClass.validation(), true);
-    testClass.pre_processing();
-    testClass.run();
-    testClass.post_processing();
-    ASSERT_EQ(8, out[0]);
-      
+  // Create Task
+  Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential testClass(taskDataSeq);
+  ASSERT_EQ(testClass.validation(), true);
+  testClass.pre_processing();
+  testClass.run();
+  testClass.post_processing();
+  ASSERT_EQ(8, out[0]);
 }
 
 TEST(Sequential_count, ans_0) {
@@ -91,7 +89,7 @@ TEST(Sequential_count, ans_11) {
   strcpy_s(str2, 6, "asdfg");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
-  
+
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
