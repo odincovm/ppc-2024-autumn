@@ -44,11 +44,10 @@ TEST(sequential_my_perf_test, my_test_pipeline_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  ASSERT_EQ(1, 0);
   ASSERT_EQ(8, out[0]);
 }
 
-TEST(sequential_example_perf_test, test_task_run) {
+TEST(sequential_my_perf_test, test_task_run) {
   char* str1 = new char[6];
   char* str2 = new char[6];
   strcpy_s(str1, 6, "qwert");
@@ -87,6 +86,5 @@ TEST(sequential_example_perf_test, test_task_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  ASSERT_EQ(1, 0);
   ASSERT_EQ(8, out[0]);
 }
