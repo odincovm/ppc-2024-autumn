@@ -23,7 +23,7 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
-  // Create Task 
+  // Create Task
   auto testClassPar =
       std::make_shared<Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel>(taskDataPar);
   ASSERT_EQ(testClassPar->validation(), true);

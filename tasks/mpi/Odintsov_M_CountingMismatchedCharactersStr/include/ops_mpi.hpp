@@ -1,16 +1,18 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 #include <boost/mpi/collectives.hpp>
 #include <boost/mpi/communicator.hpp>
+#include <string>
+#include <vector>
+
 #include "core/task/include/task.hpp"
-namespace Odintsov_M_CountingMismatchedCharactersStr_mpi{
+namespace Odintsov_M_CountingMismatchedCharactersStr_mpi {
 
 class CountingCharacterMPISequential : public ppc::core::Task {
  public:
-  explicit CountingCharacterMPISequential (std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
+  explicit CountingCharacterMPISequential(std::shared_ptr<ppc::core::TaskData> taskData_)
+      : Task(std::move(taskData_)) {}
   bool pre_processing() override;
   bool validation() override;
   bool run() override;
@@ -30,9 +32,9 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-    std::vector<char*> local_input;
-	std::vector<char*> input;
-	int ans{};
-    boost::mpi::communicator com;
+  std::vector<char*> local_input;
+  std::vector<char*> input;
+  int ans{};
+  boost::mpi::communicator com;
 };
-}  
+}  // namespace Odintsov_M_CountingMismatchedCharactersStr_mpi

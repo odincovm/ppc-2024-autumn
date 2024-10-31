@@ -1,24 +1,23 @@
 
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
+#include <vector>
 
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-
-TEST(Parallel_MPI_count, ans_10) { 
+TEST(Parallel_MPI_count, ans_10) {
   // Create data
   boost::mpi::communicator com;
-  
+
   char* str1 = new char[7];
   char* str2 = new char[7];
   strcpy_s(str1, 7, "qwertp");
   strcpy_s(str2, 7, "qellow");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
-  
+
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -28,7 +27,7 @@ TEST(Parallel_MPI_count, ans_10) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
-  
+
   // Create Task
   Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel testClassPar(taskDataPar);
   ASSERT_EQ(testClassPar.validation(), true);
@@ -51,7 +50,6 @@ TEST(Parallel_MPI_count, ans_10) {
     ASSERT_EQ(10, out[0]);
   }
 }
-
 
 TEST(Parallel_MPI_count, ans_6) {
   // Create data
