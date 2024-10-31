@@ -37,4 +37,4 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
   int ans{};
   boost::mpi::communicator com;
 };
-}  // namespace Odintsov_M_CountingMismatchedCharactersStr_mpi //
+}  // namespace Odintsov_M_CountingMismatchedCharactersStr_mpi 
