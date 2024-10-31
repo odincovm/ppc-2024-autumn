@@ -8,7 +8,7 @@
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
 TEST(Parallel_MPI_count, ans_10) {
-  // Create data
+  // Create data//
   boost::mpi::communicator com;
 
   char* str1 = new char[7];

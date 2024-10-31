@@ -22,7 +22,7 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
     input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
     input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
   }
-  // Инициализация ответа
+  // Инициализация ответа//
   ans = 0;
   return true;
 }

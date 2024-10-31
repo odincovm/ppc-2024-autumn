@@ -5,9 +5,10 @@
 
 using namespace std::chrono_literals;
 
+
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::validation() {
   internal_order_test();
-  // Проверка на то, что у нас 2 строки на входе и одно число на выходе
+  // Проверка на то, что у нас 2 строки на входе и одно число на выходе//
   bool ans_out = (taskData->inputs_count[0] == 2);
   bool ans_in = (taskData->outputs_count[0] == 1);
   return (ans_in) && (ans_out);

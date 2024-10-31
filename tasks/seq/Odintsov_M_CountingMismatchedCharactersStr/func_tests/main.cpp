@@ -14,7 +14,7 @@ TEST(Sequential_count, ans_8) {
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
-  // Create TaskData
+  // Create TaskData//
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));

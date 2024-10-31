@@ -20,4 +20,4 @@ class CountingCharacterSequential : public ppc::core::Task {
   int ans{};
 };
 
-}  // namespace Odintsov_M_CountingMismatchedCharactersStr_seq
+}  // namespace Odintsov_M_CountingMismatchedCharactersStr_seq//

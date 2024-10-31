@@ -12,7 +12,7 @@ TEST(sequential_my_perf_test, my_test_pipeline_run) {
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
-  // Create TaskData
+  // Create TaskData//
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
   strcpy_s(str2, 6, "qello");
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));

@@ -57,7 +57,8 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
-  // Create Task Data Parallel
+
+  // Create Task Data Parallel//
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
