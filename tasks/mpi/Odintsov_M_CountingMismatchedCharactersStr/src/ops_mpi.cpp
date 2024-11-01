@@ -1,8 +1,9 @@
 ﻿
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
-
+#include <string.h>
 #include <thread>
 #include <cstring>
+
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
 // Последовательная версия
@@ -91,21 +92,28 @@ bool CountingCharacterMPIParallel::pre_processing() {
  
 
   if (com.rank() == 0) {
-    char* str1 = new char[loc_size + 1];
-    char* str2 = new char[loc_size + 1];
-    memcpy(str1, input[0], loc_size);
+    char* str1 = new char[loc_size+1];
+    char* str2 = new char[loc_size+1];
+    memcpy(str1, input[0],loc_size);
+    str1[loc_size] = '\0';
     memcpy(str2, input[1], loc_size);
+    str2[loc_size] = '\0';
     //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
+  
+    printf("str1 len %zu str2 len %zu rank %d", strlen(str1), strlen(str2), com.rank());
     local_input.push_back(str1);
     local_input.push_back(str2);
     delete[] str1;
     delete[] str2;
   } else {
-    char* str1 = new char[loc_size + 1];
-    char* str2 = new char[loc_size + 1];
+    char* str1 = new char[loc_size+1];
+    char* str2 = new char[loc_size+1];
     com.recv(0, 0, str1, loc_size);
+    str1[loc_size] = '\0';
     com.recv(0, 0, str2, loc_size);
+    str2[loc_size] = '\0';
     //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
+    //printf("str1 len %zu str2 len %zu rank %d", strlen(str1), strlen(str2), com.rank());
     local_input.push_back(str1);
     local_input.push_back(str2);
     delete[] str1;
@@ -118,18 +126,21 @@ bool CountingCharacterMPIParallel::pre_processing() {
 }
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
+  //rintf("str1 %s - rank %d\n", local_input[0], com.rank());
   int loc_res = 0;
-  //
   for (size_t i = 0; i < strlen(local_input[0]); i++) {
     if (i < strlen(local_input[1])) {
       if (local_input[0][i] != local_input[1][i]) {
+        
         loc_res += 2;
       }
     } else {
       loc_res += 1;
     }
   }
-  ans = loc_res;
+  MPI_Reduce(&loc_res, &ans, 1, MPI_INT, MPI_SUM, 0, com);
+  //printf("rank %d ans %i", com.rank(), ans);
+  std::this_thread::sleep_for(20ms);
   return true;
 }
 
