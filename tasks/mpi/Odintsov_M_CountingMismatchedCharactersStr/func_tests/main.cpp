@@ -17,7 +17,7 @@ TEST(Parallel_MPI_count, ans_10) {
   memcpy(str2,"qellowhwmvpthnsmgeroodnf",25);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
-
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -39,8 +39,8 @@ TEST(Parallel_MPI_count, ans_10) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataSeq->inputs_count.emplace_back(in.size());
-    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataSeq->outputs_count.emplace_back(out.size());
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
+    taskDataSeq->outputs_count.emplace_back(out_s.size());
     Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPISequential testClassSeq(taskDataSeq);
     ASSERT_EQ(testClassSeq.validation(), true);
     testClassSeq.pre_processing();
@@ -48,14 +48,14 @@ TEST(Parallel_MPI_count, ans_10) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(40, out[0]);
+    ASSERT_EQ(out_s[0], out[0]);
   }
 }
 
 TEST(Parallel_MPI_count, ans_6) {
   // Create data
   boost::mpi::communicator com;
-
+  std::vector<int> out_s(1, 1);
   char* str1 = new char[25];
   char* str2 = new char[25];
   memcpy(str1,"lsjgjeqwqjfiijsnbhjfwfej",25);
@@ -78,14 +78,14 @@ TEST(Parallel_MPI_count, ans_6) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-
+  ASSERT_EQ(32, out[0]);
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataSeq->inputs_count.emplace_back(in.size());
-    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataSeq->outputs_count.emplace_back(out.size());
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
+    taskDataSeq->outputs_count.emplace_back(out_s.size());
     Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPISequential testClassSeq(taskDataSeq);
     ASSERT_EQ(testClassSeq.validation(), true);
     testClassSeq.pre_processing();
@@ -93,6 +93,6 @@ TEST(Parallel_MPI_count, ans_6) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(32, out[0]);
+    ASSERT_EQ(out_s[0], out[0]);
   }
 }
