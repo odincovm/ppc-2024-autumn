@@ -62,9 +62,7 @@ bool CountingCharacterMPIParallel::validation() {
 // Сделать для не кратного числа потоков, и для разных длин
 bool CountingCharacterMPIParallel::pre_processing() {
   internal_order_test();
-
   int loc_size = 0;
-
   // Инициализация в 0 поток
   if (com.rank() == 0) {
     // Инициализация loc_size;
@@ -104,8 +102,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
     local_input.push_back(str1);
     local_input.push_back(str2);
     printf(" local input:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
-    delete[] str1;
-    delete[] str2;
+
   } else {
     char* str1 = new char[loc_size+1];
     char* str2 = new char[loc_size+1];
@@ -119,14 +116,14 @@ bool CountingCharacterMPIParallel::pre_processing() {
     local_input.push_back(str1);
     local_input.push_back(str2);
     printf(" local input:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
-    delete[] str1;
-    delete[] str2;
-    printf(" after delete:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
+   
+    
   }
   ans = 0;
-  
+  delete[] str1;
+  delete[] str2;
+  printf(" after delete:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
   return true;
-  
 }
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
