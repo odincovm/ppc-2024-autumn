@@ -88,25 +88,31 @@ bool CountingCharacterMPIParallel::pre_processing() {
       com.send(pr, 0, input[1] + pr * loc_size, loc_size);
     }
   }
-  char* str1 = new char[loc_size+1];
-  char* str2 = new char[loc_size+1];
+ 
 
   if (com.rank() == 0) {
+    char* str1 = new char[loc_size + 1];
+    char* str2 = new char[loc_size + 1];
     memcpy(str1, input[0], loc_size);
     memcpy(str2, input[1], loc_size);
     //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
     local_input.push_back(str1);
     local_input.push_back(str2);
+    delete[] str1;
+    delete[] str2;
   } else {
+    char* str1 = new char[loc_size + 1];
+    char* str2 = new char[loc_size + 1];
     com.recv(0, 0, str1, loc_size);
     com.recv(0, 0, str2, loc_size);
     //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
     local_input.push_back(str1);
     local_input.push_back(str2);
+    delete[] str1;
+    delete[] str2;
   }
   ans = 0;
-  delete[] str1;
-  delete[] str2;
+  
   return true;
   
 }
