@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-
+#pragma warning(disable : 4996)
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
 #include <vector>
@@ -13,8 +13,8 @@ TEST(Parallel_MPI_count, ans_10) {
 
   char* str1 = new char[7];
   char* str2 = new char[7];
-  strcpy_s(str1, 7, "qwertp");
-  strcpy_s(str2, 7, "qellow");
+  strcpy(str1,"qwertp");
+  strcpy(str2,"qellow");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -56,8 +56,8 @@ TEST(Parallel_MPI_count, ans_6) {
 
   char* str1 = new char[9];
   char* str2 = new char[9];
-  strcpy_s(str1, 9, "lsjgjeqw");
-  strcpy_s(str2, 9, "udjgjeqp");
+  strcpy(str1,"lsjgjeqw");
+  strcpy(str2,"udjgjeqp");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 

@@ -1,4 +1,4 @@
-
+#pragma warning(disable : 4996)
 #include <gtest/gtest.h>
 
 #include <vector>
@@ -9,8 +9,8 @@ TEST(Sequential_count, ans_8) {
   // Create data
   char* str1 = new char[6];
   char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  strcpy_s(str2, 6, "qello");
+  strcpy(str1,"qwert");
+  strcpy(str2,"qello");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -35,8 +35,8 @@ TEST(Sequential_count, ans_0) {
   // Create data
   char* str1 = new char[6];
   char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  strcpy_s(str2, 6, "qwert");
+  strcpy(str1, "qwert");
+  strcpy(str2, "qwert");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -60,8 +60,8 @@ TEST(Sequential_count, ans_10) {
   // Create data
   char* str1 = new char[6];
   char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  strcpy_s(str2, 6, "asdfg");
+  strcpy(str1, "qwert");
+  strcpy(str2, "asdfg");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -85,8 +85,8 @@ TEST(Sequential_count, ans_11) {
   // Create data
   char* str1 = new char[7];
   char* str2 = new char[6];
-  strcpy_s(str1, 7, "qwerta");
-  strcpy_s(str2, 6, "asdfg");
+  strcpy(str1, "qwerta");
+  strcpy(str2, "asdfg");
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
