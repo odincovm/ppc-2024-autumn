@@ -60,9 +60,9 @@ bool CountingCharacterMPIParallel::validation() {
 bool CountingCharacterMPIParallel::pre_processing() {
   internal_order_test();
   // Получение количества потоков
-  int cout_n;
+  
   int loc_size = 0;
-  cout_n = com.size();
+ 
 
   // Инициализация в 0 поток
   if (com.rank() == 0) {
@@ -110,7 +110,7 @@ bool CountingCharacterMPIParallel::run() {
   internal_order_test();
   int loc_res = 0;
   //
-  for (int i = 0; i < strlen(input[0]); i++) {
+  for (size_t i = 0; i < strlen(input[0]); i++) {
     if (i < strlen(input[1])) {
       if (input[0][i] != input[1][i]) {
         loc_res += 2;
