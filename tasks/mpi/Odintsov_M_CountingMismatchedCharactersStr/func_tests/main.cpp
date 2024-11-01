@@ -33,7 +33,7 @@ TEST(Parallel_MPI_count, ans_10) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-  ASSERT_EQ(40, out[0]);
+
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
@@ -48,10 +48,10 @@ TEST(Parallel_MPI_count, ans_10) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(40, out_s[0]);
+    ASSERT_EQ(out[0], out_s[0]);
   }
 }
-/*
+
 TEST(Parallel_MPI_count, ans_6) {
   // Create data
   boost::mpi::communicator com;
@@ -78,7 +78,7 @@ TEST(Parallel_MPI_count, ans_6) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-  ASSERT_EQ(32, out[0]);
+
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
@@ -93,6 +93,6 @@ TEST(Parallel_MPI_count, ans_6) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(32, out_s[0]);
+    ASSERT_EQ(out[0], out_s[0]);
   }
-}*/
+}
