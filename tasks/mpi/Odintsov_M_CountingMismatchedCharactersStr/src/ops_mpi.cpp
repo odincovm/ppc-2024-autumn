@@ -120,9 +120,9 @@ bool CountingCharacterMPIParallel::run() {
   internal_order_test();
   int loc_res = 0;
   //
-  for (size_t i = 0; i < strlen(input[0]); i++) {
-    if (i < strlen(input[1])) {
-      if (input[0][i] != input[1][i]) {
+  for (size_t i = 0; i < strlen(local_input[0]); i++) {
+    if (i < strlen(local_input[1])) {
+      if (local_input[0][i] != local_input[1][i]) {
         loc_res += 2;
       }
     } else {
