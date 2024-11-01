@@ -29,7 +29,7 @@ bool CountingCharacterMPISequential::pre_processing() {
 }
 bool CountingCharacterMPISequential::run() {
   internal_order_test();
-  for (int i = 0; i < strlen(input[0]); i++) {
+  for (size_t i = 0; i < strlen(input[0]); i++) {
     if (i < strlen(input[1])) {
       if (input[0][i] != input[1][i]) {
         ans += 2;
