@@ -2,6 +2,7 @@
 #include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
 
 #include <thread>
+#include <cstring>
 
 using namespace std::chrono_literals;
 

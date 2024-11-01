@@ -2,7 +2,7 @@
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
 #include <thread>
-
+#include <cstring>
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
 // Последовательная версия
