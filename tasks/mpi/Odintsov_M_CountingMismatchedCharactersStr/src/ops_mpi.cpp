@@ -104,6 +104,8 @@ bool CountingCharacterMPIParallel::pre_processing() {
     local_input.push_back(str2);
   }
   ans = 0;
+  delete[] str1;
+  delete[] str2;
   return true;
 }
 bool CountingCharacterMPIParallel::run() {

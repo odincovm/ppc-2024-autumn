@@ -9,8 +9,9 @@ TEST(Sequential_count, ans_8) {
   // Create data
   char* str1 = new char[6];
   char* str2 = new char[6];
-  strcpy(str1,"qwert");
-  strcpy(str2,"qello");
+  memcpy(str1,"qwert",6);
+  memcpy(str2,"qello",6);
+ 
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -28,6 +29,8 @@ TEST(Sequential_count, ans_8) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
+  delete[] str1;
+  delete[] str2;
   ASSERT_EQ(8, out[0]);
 }
 
@@ -35,8 +38,8 @@ TEST(Sequential_count, ans_0) {
   // Create data
   char* str1 = new char[6];
   char* str2 = new char[6];
-  strcpy(str1, "qwert");
-  strcpy(str2, "qwert");
+  memcpy(str1, "qwert",6);
+  memcpy(str2, "qwert",6);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -54,6 +57,8 @@ TEST(Sequential_count, ans_0) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
+  delete[] str1;
+  delete[] str2;
   ASSERT_EQ(0, out[0]);
 }
 TEST(Sequential_count, ans_10) {
@@ -79,14 +84,16 @@ TEST(Sequential_count, ans_10) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
+  delete[] str1;
+  delete[] str2;
   ASSERT_EQ(10, out[0]);
 }
 TEST(Sequential_count, ans_11) {
   // Create data
   char* str1 = new char[7];
   char* str2 = new char[6];
-  strcpy(str1, "qwerta");
-  strcpy(str2, "asdfg");
+  memcpy(str1, "qwerta",7);
+  memcpy(str2, "asdfg",6);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -104,5 +111,7 @@ TEST(Sequential_count, ans_11) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
+  delete[] str1;
+  delete[] str2;
   ASSERT_EQ(11, out[0]);
 }

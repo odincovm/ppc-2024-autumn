@@ -13,8 +13,8 @@ TEST(Parallel_MPI_count, ans_10) {
 
   char* str1 = new char[7];
   char* str2 = new char[7];
-  strcpy(str1,"qwertp");
-  strcpy(str2,"qellow");
+  memcpy(str1,"qwertp",7);
+  memcpy(str2,"qellow",7);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -46,6 +46,8 @@ TEST(Parallel_MPI_count, ans_10) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
+    delete[] str1;
+    delete[] str2;
     ASSERT_EQ(10, out[0]);
   }
 }
@@ -56,8 +58,8 @@ TEST(Parallel_MPI_count, ans_6) {
 
   char* str1 = new char[9];
   char* str2 = new char[9];
-  strcpy(str1,"lsjgjeqw");
-  strcpy(str2,"udjgjeqp");
+  memcpy(str1,"lsjgjeqw",9);
+  memcpy(str2,"udjgjeqp",9);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -89,6 +91,8 @@ TEST(Parallel_MPI_count, ans_6) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
+    delete[] str1;
+    delete[] str2;
     ASSERT_EQ(6, out[0]);
   }
 }
