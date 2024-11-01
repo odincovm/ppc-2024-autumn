@@ -94,13 +94,13 @@ bool CountingCharacterMPIParallel::pre_processing() {
   if (com.rank() == 0) {
     memcpy(str1, input[0], loc_size);
     memcpy(str2, input[1], loc_size);
-    printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
+    //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
     local_input.push_back(str1);
     local_input.push_back(str2);
   } else {
     com.recv(0, 0, str1, loc_size);
     com.recv(0, 0, str2, loc_size);
-    printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
+    //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
     local_input.push_back(str1);
     local_input.push_back(str2);
   }
