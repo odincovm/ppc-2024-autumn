@@ -11,10 +11,10 @@ TEST(Parallel_MPI_count, ans_10) {
   // Create data//
   boost::mpi::communicator com;
 
-  char* str1 = new char[7];
-  char* str2 = new char[7];
-  memcpy(str1,"qwertp",7);
-  memcpy(str2,"qellow",7);
+  char* str1 = new char[25];
+  char* str2 = new char[25];
+  memcpy(str1,"qbrkyndjjobheubndjgoosjf",25);
+  memcpy(str2,"qellowhwmvpthnsmgeroodnf",25);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -33,7 +33,7 @@ TEST(Parallel_MPI_count, ans_10) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-  ASSERT_EQ(10, out[0]);
+  ASSERT_EQ(40, out[0]);
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
@@ -48,7 +48,7 @@ TEST(Parallel_MPI_count, ans_10) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(10, out[0]);
+    ASSERT_EQ(40, out[0]);
   }
 }
 
@@ -56,10 +56,10 @@ TEST(Parallel_MPI_count, ans_6) {
   // Create data
   boost::mpi::communicator com;
 
-  char* str1 = new char[9];
-  char* str2 = new char[9];
-  memcpy(str1,"lsjgjeqw",9);
-  memcpy(str2,"udjgjeqp",9);
+  char* str1 = new char[25];
+  char* str2 = new char[25];
+  memcpy(str1,"lsjgjeqwqjfiijsnbhjfwfej",25);
+  memcpy(str2,"udjgjeqpqgsgrejngjnrgjrj",25);
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -78,7 +78,7 @@ TEST(Parallel_MPI_count, ans_6) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-  ASSERT_EQ(6, out[0]);
+  ASSERT_EQ(32, out[0]);
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
@@ -93,6 +93,6 @@ TEST(Parallel_MPI_count, ans_6) {
     testClassSeq.post_processing();
     delete[] str1;
     delete[] str2;
-    ASSERT_EQ(6, out[0]);
+    ASSERT_EQ(32, out[0]);
   }
 }
