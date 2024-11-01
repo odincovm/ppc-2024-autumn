@@ -91,7 +91,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
     }
   }
  
-  printf("before monipulation:: rank %d - input[0]%s input[1]%s input\n ", com.rank(), input[0], input[1]);
+ 
   if (com.rank() == 0) {
     char* str1 = new char[loc_size+1];
     char* str2 = new char[loc_size+1];
@@ -99,11 +99,11 @@ bool CountingCharacterMPIParallel::pre_processing() {
     str1[loc_size] = '\0';
     memcpy(str2, input[1], loc_size);
     str2[loc_size] = '\0';
-    printf("pre_process :: rank %d - str1 %s , str2 %s input[0]%s input[1]%s input\n", com.rank(), str1, str2, input[0],input[1]);
-  
+    //printf("pre_process :: rank %d - str1 %s , str2 %s input[0] %s input[1] %s \n", com.rank(), str1, str2, input[0],input[1]);
     //printf("str1 len %zu str2 len %zu rank %d", strlen(str1), strlen(str2), com.rank());
     local_input.push_back(str1);
     local_input.push_back(str2);
+    printf(" local input:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
     delete[] str1;
     delete[] str2;
   } else {
@@ -113,11 +113,12 @@ bool CountingCharacterMPIParallel::pre_processing() {
     str1[loc_size] = '\0';
     com.recv(0, 0, str2, loc_size);
     str2[loc_size] = '\0';
-    printf("pre_process :: rank %d - str1 %s , str2 %s input[0]%s input[1]%s input\n", com.rank(), str1, str2, input[0], input[1]);
+    //printf("pre_process :: rank %d - str1 %s , str2 %s input[0] %s input[1] %s input\n", com.rank(), str1, str2, input[0], input[1]);
     //printf("rank %d - str1 %s , str2 %s \n", com.rank(), str1, str2);
     //printf("str1 len %zu str2 len %zu rank %d", strlen(str1), strlen(str2), com.rank());
     local_input.push_back(str1);
     local_input.push_back(str2);
+    printf(" local input:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
     delete[] str1;
     delete[] str2;
   }
