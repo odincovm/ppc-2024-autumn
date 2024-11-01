@@ -38,6 +38,7 @@ bool CountingCharacterMPISequential::run() {
     } else {
       ans += 1;
     }
+    std::this_thread::sleep_for(20ms);
   }
   return true;
 }
@@ -138,6 +139,7 @@ bool CountingCharacterMPIParallel::run() {
       loc_res += 1;
     }
   }
+  printf("rank %d - loc_res %i ", com.rank(), loc_res);
   MPI_Reduce(&loc_res, &ans, 1, MPI_INT, MPI_SUM, 0, com);
   //printf("rank %d ans %i", com.rank(), ans);
   std::this_thread::sleep_for(20ms);
