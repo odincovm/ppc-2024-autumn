@@ -127,7 +127,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
 }
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
-  //rintf("str1 %s - rank %d\n", local_input[0], com.rank());
+  //printf("str1 %s - rank %d\n", local_input[0], com.rank());
   int loc_res = 0;
   for (size_t i = 0; i < strlen(local_input[0]); i++) {
     if (i < strlen(local_input[1])) {
@@ -140,9 +140,10 @@ bool CountingCharacterMPIParallel::run() {
     }
   }
   //printf("rank %d - loc_res %i ", com.rank(), loc_res);
+  MPI_Barrier(com);
   MPI_Reduce(&loc_res, &ans, 1, MPI_INT, MPI_SUM, 0, com);
+  MPI_Barrier(com);
   //printf("rank %d ans %i", com.rank(), ans);
-  std::this_thread::sleep_for(20ms);
   return true;
 }
 
