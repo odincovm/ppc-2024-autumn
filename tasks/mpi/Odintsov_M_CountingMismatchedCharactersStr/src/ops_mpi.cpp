@@ -129,7 +129,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
 }
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
-  //printf("str1 %s, str2 %s - rank %d\n", local_input[0],local_input[1], com.rank());
+  printf("str1 %s, str2 %s - rank %d\n", local_input[0],local_input[1], com.rank());
   int loc_res = 0;
   for (size_t i = 0; i < strlen(local_input[0]); i++) {
     if (i < strlen(local_input[1])) {
