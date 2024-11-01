@@ -121,6 +121,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
     printf(" local input:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
     delete[] str1;
     delete[] str2;
+    printf(" after delete:: rank %d - str1 %s , str2 %s \n", com.rank(), local_input[0], local_input[1]);
   }
   ans = 0;
   
