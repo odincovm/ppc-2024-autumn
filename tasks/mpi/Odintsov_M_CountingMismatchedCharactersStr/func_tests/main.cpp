@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#pragma warning(disable : 4996)
+
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
 #include <vector>
