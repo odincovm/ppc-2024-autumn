@@ -1,8 +1,6 @@
 ﻿
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-#include <string.h>
-
 #include <cstring>
 #include <thread>
 
