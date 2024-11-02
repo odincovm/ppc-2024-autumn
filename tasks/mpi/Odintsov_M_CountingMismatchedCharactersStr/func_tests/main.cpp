@@ -106,7 +106,7 @@ TEST(Parallel_MPI_count, sz_24) {
     taskDataPar->outputs_count.emplace_back(out.size());
   }
 
-  Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel testClassPar(taskDataPar);
+  Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel testClassPar(taskDataPar);   
   ASSERT_EQ(testClassPar.validation(), true);
   testClassPar.pre_processing();
   testClassPar.run();
