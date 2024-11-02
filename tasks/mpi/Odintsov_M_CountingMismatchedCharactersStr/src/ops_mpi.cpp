@@ -144,10 +144,7 @@ bool CountingCharacterMPIParallel::run() {
       loc_res += 2;
     }
   }
-
-  com.barrier();
   reduce(com, loc_res, ans, std::plus(), 0);
-  com.barrier();
   return true;
 }
 
