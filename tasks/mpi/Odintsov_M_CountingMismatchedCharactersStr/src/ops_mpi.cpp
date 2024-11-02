@@ -1,8 +1,10 @@
 ﻿
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
+
 #include <string.h>
-#include <thread>
+
 #include <cstring>
+#include <thread>
 
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
@@ -60,9 +62,7 @@ bool CountingCharacterMPIParallel::validation() {
   return true;
 }
 
-
 bool CountingCharacterMPIParallel::pre_processing() {
-
   internal_order_test();
   if (com.rank() == 0) {
     // инициализация инпута
@@ -77,17 +77,11 @@ bool CountingCharacterMPIParallel::pre_processing() {
     // Слчай если строки разной длины
     if (strlen(input[0]) != (strlen(input[1]))) {
       ans = strlen(input[0]) - strlen(input[1]);
-
       input[0][strlen(input[1])] = '\0';
-
     } else {
       ans = 0;
     }
   }
-  
-  
-
-
   return true;
 }
 bool CountingCharacterMPIParallel::run() {
@@ -103,7 +97,6 @@ bool CountingCharacterMPIParallel::run() {
       loc_size = strlen(reinterpret_cast<char*>(taskData->inputs[1])) / com.size();
     }
   }
- 
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
@@ -111,7 +104,6 @@ bool CountingCharacterMPIParallel::run() {
       com.send(pr, 0, input[1] + pr * loc_size, loc_size);
     }
   }
-  
   if (com.rank() == 0) {
     char* str1 = new char[loc_size + 1];
     char* str2 = new char[loc_size + 1];
@@ -133,11 +125,10 @@ bool CountingCharacterMPIParallel::run() {
   }
   size_t size_1 = strlen(local_input[0]);
   size_t size_2 = strlen(local_input[1]);
-  
-  
+
   // Реализация
   int loc_res = 0;
-  for (size_t i = 0; i <size_1 ; i++) {
+  for (size_t i = 0; i < size_1; i++) {
     if (i < size_2) {
       if (local_input[0][i] != local_input[1][i]) {
         loc_res += 2;
@@ -146,7 +137,7 @@ bool CountingCharacterMPIParallel::run() {
       loc_res += 1;
     }
   }
-  
+
   MPI_Barrier(com);
   MPI_Reduce(&loc_res, &ans, 1, MPI_INT, MPI_SUM, 0, com);
   MPI_Barrier(com);
