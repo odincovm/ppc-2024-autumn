@@ -12,14 +12,7 @@ TEST(Parallel_MPI_count, random_sz) {
   boost::mpi::communicator com;
   std::string s1 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(12);
   std::string s2 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(12);
-
-  char* str1 = new char[s1.length() + 1];
-  std::memcpy(str1, s1.c_str(), s1.size());
-
-  char* str2 = new char[s2.length() + 1];
-  std::memcpy(str2, s2.c_str(), s2.size());
-
-  std::vector<char*> in{str1, str2};
+  std::vector<char*> in{s1.data(), s2.data()};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
@@ -50,8 +43,6 @@ TEST(Parallel_MPI_count, random_sz) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    delete[] str1;
-    delete[] str2;
     ASSERT_EQ(out[0], out_s[0]);
   }
 }
