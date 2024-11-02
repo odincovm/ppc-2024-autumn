@@ -16,12 +16,12 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::pre_processing() {
   internal_order_test();
   // инициализация инпута
-  if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+  if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >= strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
   } else {
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
   }
   // Инициализация ответа
   ans = 0;
@@ -29,8 +29,8 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::run() {
   internal_order_test();
-  auto it1 = input[0];
-  auto it2 = input[1];
+  auto *it1 = input[0];
+  auto *it2 = input[1];
   while (*it1 != '\0' && *it2 != '\0') {
     if (*it1 != *it2) {
       ans += 2;
@@ -43,6 +43,6 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::post_processing() {
   internal_order_test();
-  reinterpret_cast<int*>(taskData->outputs[0])[0] = ans;
+  reinterpret_cast<int *>(taskData->outputs[0])[0] = ans;
   return true;
 }

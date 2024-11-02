@@ -35,12 +35,12 @@ bool CountingCharacterMPISequential::validation() {
 bool CountingCharacterMPISequential::pre_processing() {
   internal_order_test();
   // инициализация инпута
-  if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+  if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >= strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
   } else {
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-    input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
   }
   // Инициализация ответа
   ans = 0;
@@ -48,8 +48,8 @@ bool CountingCharacterMPISequential::pre_processing() {
 }
 bool CountingCharacterMPISequential::run() {
   internal_order_test();
-  auto it1 = input[0];
-  auto it2 = input[1];
+  auto *it1 = input[0];
+  auto *it2 = input[1];
   while (*it1 != '\0' && *it2 != '\0') {
     if (*it1 != *it2) {
       ans += 2;
@@ -62,7 +62,7 @@ bool CountingCharacterMPISequential::run() {
 }
 bool CountingCharacterMPISequential::post_processing() {
   internal_order_test();
-  reinterpret_cast<int*>(taskData->outputs[0])[0] = ans;
+  reinterpret_cast<int *>(taskData->outputs[0])[0] = ans;
   return true;
 }
 // Параллельная версия
@@ -81,12 +81,13 @@ bool CountingCharacterMPIParallel::pre_processing() {
   internal_order_test();
   if (com.rank() == 0) {
     // инициализация инпута
-    if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
-      input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
-      input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
+    if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >=
+        strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
+      input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
+      input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
     } else {
-      input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
-      input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
+      input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
+      input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     }
 
     // Слчай если строки разной длины
@@ -106,10 +107,11 @@ bool CountingCharacterMPIParallel::run() {
   // Инициализация в 0 поток
   if (com.rank() == 0) {
     // Инициализация loc_size;
-    if (strlen(reinterpret_cast<char*>(taskData->inputs[0])) >= strlen(reinterpret_cast<char*>(taskData->inputs[1]))) {
-      loc_size = strlen(reinterpret_cast<char*>(taskData->inputs[0])) / com.size();
+    if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >=
+        strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
+      loc_size = strlen(reinterpret_cast<char *>(taskData->inputs[0])) / com.size();
     } else {
-      loc_size = strlen(reinterpret_cast<char*>(taskData->inputs[1])) / com.size();
+      loc_size = strlen(reinterpret_cast<char *>(taskData->inputs[1])) / com.size();
     }
   }
   broadcast(com, loc_size, 0);
@@ -152,7 +154,7 @@ bool CountingCharacterMPIParallel::run() {
 bool CountingCharacterMPIParallel::post_processing() {
   internal_order_test();
   if (com.rank() == 0) {
-    reinterpret_cast<int*>(taskData->outputs[0])[0] = ans;
+    reinterpret_cast<int *>(taskData->outputs[0])[0] = ans;
   }
   return true;
 }
