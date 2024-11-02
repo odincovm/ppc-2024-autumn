@@ -7,14 +7,12 @@
 
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-TEST(Parallel_MPI_count, ans_10) {
+TEST(Parallel_MPI_count, sz_7) {
   // Create data//
   boost::mpi::communicator com;
-
-  char* str1 = new char[25];
-  char* str2 = new char[25];
-  memcpy(str1,"qbrkyndjjobheubndjgoosjf",25);
-  memcpy(str2,"qellowhwmvpthnsmgeroodnf",25);
+  char str1[] = "qbrkyndjjobh";
+  char str2[] = "qellowhwmvpt";
+  
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
@@ -46,13 +44,11 @@ TEST(Parallel_MPI_count, ans_10) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    delete[] str1;
-    delete[] str2;
     ASSERT_EQ(out[0], out_s[0]);
   }
 }
 
-TEST(Parallel_MPI_count, ans_6) {
+TEST(Parallel_MPI_count, sz_24) {
   // Create data
   boost::mpi::communicator com;
   std::vector<int> out_s(1, 1);
