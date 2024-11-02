@@ -129,9 +129,9 @@ TEST(Parallel_MPI_count, sz_24) {
 TEST(Parallel_MPI_count, df_sz_15) {
   // Create data//
   boost::mpi::communicator com;
-  std::string s1 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(15);
-  std::string s2 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(12);
-  std::vector<char*> in{s1.data(), s2.data()};
+  char str1[] = "qgiemylemejsoqq";
+  char str2[] = "qmrisibemqjd";
+  std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
@@ -168,9 +168,9 @@ TEST(Parallel_MPI_count, df_sz_15) {
 TEST(Parallel_MPI_count, df_sz_27) {
   // Create data//
   boost::mpi::communicator com;
-  std::string s1 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(27);
-  std::string s2 = Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(24);
-  std::vector<char*> in{s1.data(), s2.data()};
+  char str1[] = "qjgowngudkehbubsqtexdeewkbq";
+  char str2[] = "qmrisibemqjdqkrodjruwee";
+  std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
