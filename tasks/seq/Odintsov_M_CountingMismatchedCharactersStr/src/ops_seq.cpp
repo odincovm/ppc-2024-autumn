@@ -29,16 +29,16 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::run() {
   internal_order_test();
-  size_t size = strlen(input[0]);
-  for (size_t i = 0; i < size; i++) {
-    if (i < strlen(input[1])) {
-      if (input[0][i] != input[1][i]) {
-        ans += 2;
-      }
-    } else {
-      ans += 1;
+  auto it1 = input[0];
+  auto it2 = input[1];
+  while (*it1 != '\0' && *it2 != '\0') {
+    if (*it1 != *it2) {
+      ans += 2;
     }
+    ++it1;
+    ++it2;
   }
+  ans += std::strlen(it1) + std::strlen(it2);
   return true;
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::post_processing() {

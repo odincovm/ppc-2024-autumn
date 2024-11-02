@@ -9,7 +9,7 @@
 #include "core/task/include/task.hpp"
 namespace Odintsov_M_CountingMismatchedCharactersStr_mpi {
 
-std::string get_random_str(int sz);
+std::string get_random_str(size_t sz);
 
 class CountingCharacterMPISequential : public ppc::core::Task {
  public:
