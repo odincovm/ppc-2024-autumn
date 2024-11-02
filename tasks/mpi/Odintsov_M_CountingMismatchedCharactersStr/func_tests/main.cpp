@@ -165,11 +165,11 @@ TEST(Parallel_MPI_count, df_sz_15) {
     ASSERT_EQ(out[0], out_s[0]);
   }
 }
-TEST(Parallel_MPI_count, df_sz_27) {
+TEST(Parallel_MPI_count, df_sz_25) {
   // Create data//
   boost::mpi::communicator com;
-  char str1[] = "qjgowngudkehbubsqtexdeewkbq";
-  char str2[] = "qmrisibemqjdqkrodjruwee";
+  char str1[] = "qjgowngudkehbubsqtexdeewk";
+  char str2[] = "qmrisibemqjdqkrodjruweez";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
