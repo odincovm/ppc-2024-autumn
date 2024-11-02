@@ -63,10 +63,10 @@ TEST(Sequential_count, ans_0) {
 }
 TEST(Sequential_count, ans_10) {
   // Create data
-  char* str1 = new char[6];
-  char* str2 = new char[6];
-  strcpy(str1, "qwert");
-  strcpy(str2, "asdfg");
+  char str1[] = "qwert";
+
+  char str2[] = "asdfg";
+  
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -84,8 +84,7 @@ TEST(Sequential_count, ans_10) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  delete[] str1;
-  delete[] str2;
+
   ASSERT_EQ(10, out[0]);
 }
 TEST(Sequential_count, ans_11) {
