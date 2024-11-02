@@ -102,44 +102,41 @@ bool CountingCharacterMPIParallel::run() {
       com.send(pr, 0, input[1] + pr * loc_size, loc_size);
     }
   }
+  std::string str1;
+  std::string str2;
   if (com.rank() == 0) {
-    char* str1 = new char[loc_size + 1];
-    char* str2 = new char[loc_size + 1];
-    memcpy(str1, input[0], loc_size);
-    str1[loc_size] = '\0';
-    memcpy(str2, input[1], loc_size);
-    str2[loc_size] = '\0';
+    for (int i = 0; i < loc_size; i++) {
+      str1.push_back(input[0][i]);
+      str2.push_back(input[1][i]);
+    }
     local_input.push_back(str1);
     local_input.push_back(str2);
   } else {
-    char* str1 = new char[loc_size + 1];
-    char* str2 = new char[loc_size + 1];
-    com.recv(0, 0, str1, loc_size);
-    str1[loc_size] = '\0';
-    com.recv(0, 0, str2, loc_size);
-    str2[loc_size] = '\0';
+    com.recv(0, 0, &str1[0], loc_size);
+    com.recv(0, 0, &str2[0], loc_size);
     local_input.push_back(str1);
     local_input.push_back(str2);
   }
-  size_t size_1 = strlen(local_input[0]);
-  size_t size_2 = strlen(local_input[1]);
-
+  size_t size_1 = local_input[0].size();
+  size_t size_2 = local_input[1].size();
+  printf("rank %d str1 %s str2 %s \n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
+  
   // Реализация
   int loc_res = 0;
   for (size_t i = 0; i < size_1; i++) {
     if (i < size_2) {
       if (local_input[0][i] != local_input[1][i]) {
+        printf("rank %d  loc_res %i", com.rank(), loc_res);
         loc_res += 2;
       }
     } else {
       loc_res += 1;
     }
   }
-
-  MPI_Barrier(com);
-  MPI_Reduce(&loc_res, &ans, 1, MPI_INT, MPI_SUM, 0, com);
-  MPI_Barrier(com);
-
+  printf("rank %d loc_res% i \n", com.rank(), loc_res);
+  com.barrier();
+  ans += loc_res;
+  com.barrier();
   return true;
 }
 

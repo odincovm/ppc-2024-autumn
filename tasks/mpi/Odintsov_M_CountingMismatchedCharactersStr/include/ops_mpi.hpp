@@ -32,7 +32,7 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  std::vector<char*> local_input;
+  std::vector<std::string> local_input;
   std::vector<char*> input;
   int ans{};
   boost::mpi::communicator com;
