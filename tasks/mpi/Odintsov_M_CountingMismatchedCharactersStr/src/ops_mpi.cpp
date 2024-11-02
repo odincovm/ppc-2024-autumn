@@ -10,7 +10,9 @@ using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
 
 std::string Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(size_t sz) {
-  const char characters[] = "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбюABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const char characters[] =
+      "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбюABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv"
+      "wxyz0123456789";
   std::string str;
 
   std::srand(std::time(nullptr));
