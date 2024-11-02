@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <boost/mpi/timer.hpp>
+#include <vector>
+
 #include "core/perf/include/perf.hpp"
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 

@@ -60,8 +60,9 @@ bool CountingCharacterMPIParallel::validation() {
   return true;
 }
 
-// Сделать для не кратного числа потоков, и для разных длин
+
 bool CountingCharacterMPIParallel::pre_processing() {
+
   internal_order_test();
   if (com.rank() == 0) {
     // инициализация инпута
@@ -72,8 +73,21 @@ bool CountingCharacterMPIParallel::pre_processing() {
       input.push_back(reinterpret_cast<char*>(taskData->inputs[1]));
       input.push_back(reinterpret_cast<char*>(taskData->inputs[0]));
     }
+
+    // Слчай если строки разной длины
+    if (strlen(input[0]) != (strlen(input[1]))) {
+      ans = strlen(input[0]) - strlen(input[1]);
+
+      input[0][strlen(input[1])] = '\0';
+
+    } else {
+      ans = 0;
+    }
   }
-  ans = 0;
+  
+  
+
+
   return true;
 }
 bool CountingCharacterMPIParallel::run() {
@@ -89,6 +103,7 @@ bool CountingCharacterMPIParallel::run() {
       loc_size = strlen(reinterpret_cast<char*>(taskData->inputs[1])) / com.size();
     }
   }
+ 
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
