@@ -6,15 +6,14 @@
 #include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
 TEST(sequential_my_perf_test, my_test_pipeline_run) {
   // Create data
-  char* str1 = new char[6];
-  char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
+  char str1[] = "qwert";
+  char str2[] = "qello";
+
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
-  strcpy_s(str2, 6, "qello");
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
   taskDataSeq->inputs_count.emplace_back(in.size());
@@ -48,10 +47,9 @@ TEST(sequential_my_perf_test, my_test_pipeline_run) {
 }
 
 TEST(sequential_my_perf_test, test_task_run) {
-  char* str1 = new char[6];
-  char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  strcpy_s(str2, 6, "qello");
+  char str1[] = "qwert";
+  char str2[] = "qello";
+
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 

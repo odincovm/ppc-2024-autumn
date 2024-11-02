@@ -8,10 +8,8 @@
 
 TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   boost::mpi::communicator com;
-  char* str1 = new char[7];
-  char* str2 = new char[7];
-  strcpy_s(str1, 7, "qwertp");
-  strcpy_s(str2, 7, "qellow");
+  char str1[] = "qbrkyndjjobh";
+  char str2[] = "qellowhwmvpt";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -51,10 +49,8 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
 }
 TEST(MPI_parallel_perf_test, my_test_task_run) {
   boost::mpi::communicator com;
-  char* str1 = new char[7];
-  char* str2 = new char[7];
-  strcpy_s(str1, 7, "qwertp");
-  strcpy_s(str2, 7, "qellow");
+  char str1[] = "qbrkyndjjobh";
+  char str2[] = "qellowhwmvpt";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
