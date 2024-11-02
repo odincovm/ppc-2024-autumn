@@ -1,11 +1,29 @@
 ﻿
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
+#include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <thread>
 
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
+
+std::string Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(int sz) {
+  const char characters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  std::string str;
+
+  std::srand(std::time(nullptr));
+
+  for (size_t i = 0; i < sz; ++i) {
+    // Генерируем случайный индекс
+    int index = std::rand() % (sizeof(characters) - 1);
+    str += characters[index];
+  }
+
+  return str;
+}
+
 // Последовательная версия
 bool CountingCharacterMPISequential::validation() {
   internal_order_test();
@@ -102,40 +120,34 @@ bool CountingCharacterMPIParallel::run() {
       com.send(pr, 0, input[1] + pr * loc_size, loc_size);
     }
   }
-  std::string str1;
-  std::string str2;
+
   if (com.rank() == 0) {
-    for (int i = 0; i < loc_size; i++) {
-      str1.push_back(input[0][i]);
-      str2.push_back(input[1][i]);
-    }
+    std::string str1(input[0], loc_size);
+    std::string str2(input[1], loc_size);
     local_input.push_back(str1);
     local_input.push_back(str2);
   } else {
-    com.recv(0, 0, &str1[0], loc_size);
-    com.recv(0, 0, &str2[0], loc_size);
+    std::string str1;
+    std::string str2;
+    str1.resize(loc_size);
+    str2.resize(loc_size);
+    com.recv(0, 0, str1.data(), loc_size);
+    com.recv(0, 0, str2.data(), loc_size);
     local_input.push_back(str1);
     local_input.push_back(str2);
   }
   size_t size_1 = local_input[0].size();
-  size_t size_2 = local_input[1].size();
-  printf("rank %d str1 %s str2 %s \n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
-  
-  // Реализация
+
+  //  Реализация
   int loc_res = 0;
   for (size_t i = 0; i < size_1; i++) {
-    if (i < size_2) {
-      if (local_input[0][i] != local_input[1][i]) {
-        printf("rank %d  loc_res %i", com.rank(), loc_res);
-        loc_res += 2;
-      }
-    } else {
-      loc_res += 1;
+    if (local_input[0][i] != local_input[1][i]) {
+      loc_res += 2;
     }
   }
-  printf("rank %d loc_res% i \n", com.rank(), loc_res);
+
   com.barrier();
-  ans += loc_res;
+  reduce(com, loc_res, ans, std::plus(), 0);
   com.barrier();
   return true;
 }
