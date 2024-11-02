@@ -127,7 +127,7 @@ bool CountingCharacterMPIParallel::run() {
     local_input.push_back(str2);
   } else {
     std::string str1('0', loc_size);
-    std::string str2('0',loc_size);
+    std::string str2('0', loc_size);
     com.recv(0, 0, str1.data(), loc_size);
     com.recv(0, 0, str2.data(), loc_size);
     local_input.push_back(str1);
