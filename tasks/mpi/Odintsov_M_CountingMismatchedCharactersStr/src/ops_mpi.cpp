@@ -18,7 +18,7 @@ std::string Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(int s
   for (size_t i = 0; i < sz; ++i) {
     // Генерируем случайный индекс
     int index = std::rand() % (sizeof(characters) - 1);
-    str += characters[index];
+    str = characters[index];
   }
 
   return str;
