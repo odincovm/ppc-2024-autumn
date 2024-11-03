@@ -89,7 +89,6 @@ bool CountingCharacterMPIParallel::pre_processing() {
       input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
       input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     }
-
     // Слчай если строки разной длины
     if (strlen(input[0]) != (strlen(input[1]))) {
       ans = strlen(input[0]) - strlen(input[1]);
@@ -103,25 +102,22 @@ bool CountingCharacterMPIParallel::pre_processing() {
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
   // Пересылка
-  int loc_size = 0;
+  size_t loc_size = 0;
   // Инициализация в 0 поток
   if (com.rank() == 0) {
     // Инициализация loc_size;
-    if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >=
-        strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
-      loc_size = strlen(reinterpret_cast<char *>(taskData->inputs[0])) / com.size();
-    } else {
-      loc_size = strlen(reinterpret_cast<char *>(taskData->inputs[1])) / com.size();
-    }
+    loc_size = (strlen(input[0]) + com.size() - 1) /
+               com.size();  // Округляем вверх, чтобы при большем количестве потоков loc_size = 1
   }
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
-      com.send(pr, 0, input[0] + pr * loc_size, loc_size);
-      com.send(pr, 0, input[1] + pr * loc_size, loc_size);
+      size_t send_size =
+          std::min(loc_size, strlen(input[0] - pr * loc_size));  // Ограничиваем размар отправляемых данных
+      com.send(pr, 0, input[0] + pr * loc_size, send_size);
+      com.send(pr, 0, input[1] + pr * loc_size, send_size);
     }
   }
-
   if (com.rank() == 0) {
     std::string str1(input[0], loc_size);
     std::string str2(input[1], loc_size);
@@ -136,7 +132,6 @@ bool CountingCharacterMPIParallel::run() {
     local_input.push_back(str2);
   }
   size_t size_1 = local_input[0].size();
-
   //  Реализация
   int loc_res = 0;
   for (size_t i = 0; i < size_1; i++) {
