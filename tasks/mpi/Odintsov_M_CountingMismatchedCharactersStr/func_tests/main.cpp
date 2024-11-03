@@ -7,11 +7,11 @@
 
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-TEST(Parallel_MPI_count, sz_1) {
+TEST(Parallel_MPI_count, sz_0) {
   // Create data//
   boost::mpi::communicator com;
-  char str1[] = "1";
-  char str2[] = "2";
+  char str1[] = "";
+  char str2[] = "";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
   std::vector<int> out_s(1, 1);
