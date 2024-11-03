@@ -9,21 +9,6 @@
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
 
-std::string Odintsov_M_CountingMismatchedCharactersStr_mpi::get_random_str(size_t sz) {
-  const char characters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrswxyz0123456789";
-  std::string str;
-
-  std::srand(std::time(nullptr));
-
-  for (size_t i = 0; i < sz; ++i) {
-    // Генерируем случайный индекс
-    int index = std::rand() % (sizeof(characters) - 1);
-    str = characters[index];
-  }
-
-  return str;
-}
-
 // Последовательная версия
 bool CountingCharacterMPISequential::validation() {
   internal_order_test();
