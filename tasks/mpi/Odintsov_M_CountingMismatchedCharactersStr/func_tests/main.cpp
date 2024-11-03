@@ -1,4 +1,4 @@
-
+ï»¿
 #include <gtest/gtest.h>
 
 #include <boost/mpi/communicator.hpp>
@@ -14,7 +14,7 @@ std::string get_random_str(size_t sz) {
   std::srand(std::time(nullptr));
 
   for (size_t i = 0; i < sz; ++i) {
-    // Ãåíåðèðóåì ñëó÷àéíûé èíäåêñ
+    // Ð“ÐµÐ½ÐµÑ€Ð¸Ñ€ÑƒÐµÐ¼ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ð¹ Ð¸Ð½Ð´ÐµÐºÑ
     int index = std::rand() % (sizeof(characters) - 1);
     str = characters[index];
   }
