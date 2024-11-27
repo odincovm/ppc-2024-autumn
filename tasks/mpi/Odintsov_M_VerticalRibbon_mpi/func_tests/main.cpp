@@ -1,4 +1,4 @@
-
+п»ї
 #include <gtest/gtest.h>
 
 #include <boost/mpi/communicator.hpp>
@@ -10,8 +10,8 @@
 
 std::vector<double> getMatrix(int sz) {
   std::vector<double> matrix(sz, 0);
-  std::random_device rd;   // Источник случайности
-  std::mt19937 gen(rd());  // Генератор на основе Mersenne Twister
+  std::random_device rd;   // РСЃС‚РѕС‡РЅРёРє СЃР»СѓС‡Р°Р№РЅРѕСЃС‚Рё
+  std::mt19937 gen(rd());  // Р“РµРЅРµСЂР°С‚РѕСЂ РЅР° РѕСЃРЅРѕРІРµ Mersenne Twister
   std::uniform_real_distribution<double> dis(0, 10);
   for (int i = 0; i < sz; ++i) {
     matrix[i] = dis(gen);
