@@ -1,31 +1,37 @@
+
 #include <gtest/gtest.h>
 
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
-#include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
+#include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
+#include <boost/mpi/timer.hpp>
 
 TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
+  // Create data
   boost::mpi::communicator com;
-  char* str1 = new char[7];
-  char* str2 = new char[7];
-  strcpy_s(str1, 7, "qwertp");
-  strcpy_s(str2, 7, "qellow");
-  std::vector<char*> in{str1, str2};
-  std::vector<int> out(1, 1);
+
+  // Create data
+  std::vector<double> matrixA(90000, 1);
+  std::vector<double> matrixB(90000, 1);
+  std::vector<double> out(90000, 0);
+  std::vector<double> out_s(90000, 0);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
-    taskDataPar->inputs_count.emplace_back(in.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
+    taskDataPar->inputs_count.emplace_back(90000);
+    taskDataPar->inputs_count.emplace_back(300);
+    taskDataPar->inputs_count.emplace_back(90000);
+    taskDataPar->inputs_count.emplace_back(300);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataPar->outputs_count.emplace_back(out.size());
+    taskDataPar->outputs_count.emplace_back(90000);
+    taskDataPar->outputs_count.emplace_back(300);
   }
   // Create Task
-  auto testClassPar =
-      std::make_shared<Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel>(taskDataPar);
+  auto testClassPar = std::make_shared<Odintsov_M_VerticalRibbon_mpi::VerticalRibbonMPIParallel>(taskDataPar);
   ASSERT_EQ(testClassPar->validation(), true);
   testClassPar->pre_processing();
   testClassPar->run();
@@ -45,30 +51,33 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(10, out[0]);
+    ASSERT_EQ(300, out[0]);
   }
 }
 TEST(MPI_parallel_perf_test, my_test_task_run) {
   boost::mpi::communicator com;
-  char* str1 = new char[7];
-  char* str2 = new char[7];
-  strcpy_s(str1, 7, "qwertp");
-  strcpy_s(str2, 7, "qellow");
-  std::vector<char*> in{str1, str2};
-  std::vector<int> out(1, 1);
+
+  // Create data
+  std::vector<double> matrixA(90000, 1);
+  std::vector<double> matrixB(90000, 1);
+  std::vector<double> out(90000, 0);
+  std::vector<double> out_s(90000, 0);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
-    taskDataPar->inputs_count.emplace_back(in.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
+    taskDataPar->inputs_count.emplace_back(90000);
+    taskDataPar->inputs_count.emplace_back(300);
+    taskDataPar->inputs_count.emplace_back(90000);
+    taskDataPar->inputs_count.emplace_back(300);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataPar->outputs_count.emplace_back(out.size());
+    taskDataPar->outputs_count.emplace_back(90000);
+    taskDataPar->outputs_count.emplace_back(300);
   }
   // Create Task
-  auto testClassPar =
-      std::make_shared<Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel>(taskDataPar);
+  auto testClassPar = std::make_shared<Odintsov_M_VerticalRibbon_mpi::VerticalRibbonMPIParallel>(taskDataPar);
   ASSERT_EQ(testClassPar->validation(), true);
   testClassPar->pre_processing();
   testClassPar->run();
@@ -88,6 +97,6 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(10, out[0]);
+    ASSERT_EQ(300, out[0]);
   }
 }
