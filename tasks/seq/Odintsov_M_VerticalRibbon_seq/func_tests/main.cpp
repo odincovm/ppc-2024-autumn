@@ -1,4 +1,4 @@
-
+ï»¿
 #include <gtest/gtest.h>
 
 #include <seq/Odintsov_M_VerticalRibbon_seq/include/ops_seq.hpp>
@@ -65,7 +65,7 @@ TEST(Sequential_multy, sz_40000) {
   for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 TEST(Sequential_multy, dfsz_1200) {
-  // Óâåëè÷èòü ðàçìåð ìàòðèöû
+  // Ð£Ð²ÐµÐ»Ð¸Ñ‡Ð¸Ñ‚ÑŒ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ñ‹
   // Create data
   std::vector<double> matrixA(1200, 1);
   std::vector<double> matrixB(1200, 1);
