@@ -1,4 +1,4 @@
-
+п»ї
 #pragma once
 
 #include <boost/mpi/collectives.hpp>
@@ -22,7 +22,7 @@ class VerticalRibbonMPISequential : public ppc::core::Task {
   std ::vector<double> matrixA;
   std::vector<double> matrixB;
   std::vector<double> matrixC;
-  // [0] - размер, [1] - количество строк, [2] - количество столбцов
+  // [0] - СЂР°Р·РјРµСЂ, [1] - РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє, [2] - РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕР»Р±С†РѕРІ
   std::vector<int> szA;
   std::vector<int> szB;
   std::vector<int> szC;
@@ -43,7 +43,7 @@ class VerticalRibbonMPIParallel : public ppc::core::Task {
   std ::vector<double> matrixA;
   std::vector<double> matrixB;
   std::vector<double> matrixC;
-  // [0] - размер, [1] - количество строк, [2] - количество столбцов
+  // [0] - СЂР°Р·РјРµСЂ, [1] - РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє, [2] - РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕР»Р±С†РѕРІ
   std::vector<int> szA;
   std::vector<int> szB;
   std::vector<int> szC;
