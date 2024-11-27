@@ -66,8 +66,6 @@ bool VerticalRibbonMPISequential::run() {
       // Умножаем строку из A на столбец из B
       for (int k = 0; k < szB[1]; k++) {
         matrixC[Arow * szC[1] + i] += matrixA[Arow * szA[2] + k] * ribbon[k];
-        // std::cerr << "Значение " << matrixC[Arow * szC[1] + i] << " A: " << matrixA[Arow * szA[1] + k]
-        //  << " B:  " << ribbon[k]<<  " Итерация " << k << " \n";
       }
     }
   }
@@ -84,7 +82,6 @@ bool VerticalRibbonMPISequential::post_processing() {
 // Параллельная версия
 bool VerticalRibbonMPIParallel::validation() {
   internal_order_test();
-
   // Проверка на то, что у нас 2 строки на входе и одно число на выходе
   if (com.rank() == 0) {
     // Проверка на то что наши матрицы не пустые
@@ -103,7 +100,6 @@ bool VerticalRibbonMPIParallel::validation() {
 
 bool VerticalRibbonMPIParallel::pre_processing() {
   internal_order_test();
-
   if (com.rank() == 0) {
     szA.push_back(taskData->inputs_count[0]);
 
@@ -153,18 +149,17 @@ bool VerticalRibbonMPIParallel::run() {
   // Определить размер ленты
   if (com.rank() == 0) {
     // Округляем вверх, чтобы если число потоков было больш чем число столбцов было значение 1
-    ribbon_sz = ceil(szB[2] / com.size());
+    ribbon_sz = (szB[2] + com.size() - 1) / com.size();
   }
+
   //  Отправить  размеры по потокам по всем потокам
   broadcast(com, ribbon_sz, 0);
-
   // Отправить ленты
   if (com.rank() == 0) {
     // Для каждго потока
     for (int pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
       // Формаруем ленту
-      // Сделать - корриктировку по кол-ву потоков
 
       // По каждой ленте
       for (int j = 0; j < szB[1]; j++) {
@@ -175,7 +170,6 @@ bool VerticalRibbonMPIParallel::run() {
           ribbon.push_back(matrixB[szB[2] * j + i]);
         }
       }
-
       // Отправляем ленту
       com.send(pr, 0, ribbon.data(), ribbon.size());
     }
@@ -189,8 +183,6 @@ bool VerticalRibbonMPIParallel::run() {
       }
     }
   } else {
-    // Корректировку по кол-ву потоков
-
     std::vector<double> buffer(ribbon_sz * szB[1], 0);
     com.recv(0, 0, buffer.data(), buffer.size());
     local_ribbon.insert(local_ribbon.end(), buffer.begin(), buffer.end());
@@ -214,7 +206,7 @@ bool VerticalRibbonMPIParallel::run() {
   gather(com, local_mC.data(), local_mC.size(), matrixC, 0);
 
   if (com.rank() == 0) {
-    // Транчпонируем матрицу
+    // Транcпонируем матрицу
     std::vector<double> transposed(matrixC.size());
 
     // Перемещаем элементы из исходной матрицы в транспонированную

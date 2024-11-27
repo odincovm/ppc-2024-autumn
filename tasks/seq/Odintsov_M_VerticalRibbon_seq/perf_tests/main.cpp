@@ -1,10 +1,10 @@
 
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <seq/Odintsov_M_VerticalRibbon_seq/include/ops_seq.hpp>
-#include "core/perf/include/perf.hpp"
+#include <vector>
 
+#include "core/perf/include/perf.hpp"
 
 TEST(sequential_matrix_perf_test, matrix_test_pipeline_run) {
   // Create data
@@ -44,11 +44,11 @@ TEST(sequential_matrix_perf_test, matrix_test_pipeline_run) {
 
   // Create Perf analyzer
   auto perfAnalyzer = std::make_shared<ppc::core::Perf>(testClass);
- 
+
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
- 
+
   ppc::core::Perf::print_perf_statistic(perfResults);
-  
+
   for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 

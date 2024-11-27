@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-
 #include "core/task/include/task.hpp"
 namespace Odintsov_M_VerticalRibbon_seq {
 
@@ -17,10 +16,9 @@ class VerticalRibbonSequential : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  
   std ::vector<double> matrixA;
   std::vector<double> matrixB;
-  std:: vector<double> matrixC;
+  std::vector<double> matrixC;
   // [0] - размер, [1] - количество строк, [2] - количество столбцов
   std::vector<int> szA;
   std::vector<int> szB;
