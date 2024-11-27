@@ -161,7 +161,7 @@ bool VerticalRibbonMPIParallel::run() {
   // Отправить ленты
   if (com.rank() == 0) {
     // Для каждго потока
-    for (size_t pr = 1; pr < com.size(); pr++) {
+    for (int pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
       // Формаруем ленту
       // Сделать - корриктировку по кол-ву потоков
