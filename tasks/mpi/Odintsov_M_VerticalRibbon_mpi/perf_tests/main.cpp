@@ -51,7 +51,7 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+    for (size_t i = 0; i < MatrixC.size(); i++) ASSERT_EQ(MatrixC[i], out[i]);
   }
 }
 TEST(MPI_parallel_perf_test, my_test_task_run) {
@@ -97,6 +97,6 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+    for (size_t i = 0; i < MatrixC.size(); i++) ASSERT_EQ(MatrixC[i], out[i]);
   }
 }
