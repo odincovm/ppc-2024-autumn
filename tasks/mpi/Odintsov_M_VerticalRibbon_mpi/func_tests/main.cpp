@@ -11,12 +11,12 @@ TEST(Parallel_MPI_matrix, sz_3600) {
   // Create data
   boost::mpi::communicator com;
 
-  	// Create data
-  std::vector<double> matrixA(3600,1) ;
-  std::vector<double> matrixB(3600,1) ;
+  // Create data
+  std::vector<double> matrixA(3600, 1);
+  std::vector<double> matrixB(3600, 1);
   std::vector<double> out(3600, 0);
   std::vector<double> out_s(3600, 0);
-  
+
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -30,16 +30,15 @@ TEST(Parallel_MPI_matrix, sz_3600) {
     taskDataPar->outputs_count.emplace_back(3600);
     taskDataPar->outputs_count.emplace_back(60);
   }
-  
+
   // Create Task
   Odintsov_M_VerticalRibbon_mpi::VerticalRibbonMPIParallel testClassPar(taskDataPar);
   ASSERT_EQ(testClassPar.validation(), true);
   testClassPar.pre_processing();
-  
+
   testClassPar.run();
-  
+
   testClassPar.post_processing();
-  
 
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
@@ -57,11 +56,10 @@ TEST(Parallel_MPI_matrix, sz_3600) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    for (int i = 0; i < out.size(); i++) {
+    for (size_t i = 0; i < out.size(); i++) {
       ASSERT_EQ(out[i], out_s[i]);
     }
   }
-  
 }
 
 TEST(Parallel_MPI_matrix, sz_90000) {
@@ -113,7 +111,7 @@ TEST(Parallel_MPI_matrix, sz_90000) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    for (int i = 0; i < out.size(); i++) {
+    for (size_t i = 0; i < out.size(); i++) {
       ASSERT_EQ(out[i], out_s[i]);
     }
   }
@@ -168,7 +166,7 @@ TEST(Parallel_MPI_matrix, difsz_1800) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    for (int i = 0; i < out.size(); i++) {
+    for (size_t i = 0; i < out.size(); i++) {
       ASSERT_EQ(out[i], out_s[i]);
     }
   }

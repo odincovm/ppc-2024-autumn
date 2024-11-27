@@ -49,7 +49,7 @@ TEST(sequential_matrix_perf_test, matrix_test_pipeline_run) {
  
   ppc::core::Perf::print_perf_statistic(perfResults);
   
-  for (int i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 
 TEST(sequential_my_perf_test, test_task_run) {
@@ -94,5 +94,5 @@ TEST(sequential_my_perf_test, test_task_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  for (int i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }

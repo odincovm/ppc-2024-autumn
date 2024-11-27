@@ -1,11 +1,11 @@
 
 #include <gtest/gtest.h>
 
+#include <boost/mpi/timer.hpp>
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
 #include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
-#include <boost/mpi/timer.hpp>
 
 TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   // Create data
@@ -15,7 +15,7 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   std::vector<double> matrixA(90000, 1);
   std::vector<double> matrixB(90000, 1);
   std::vector<double> out(90000, 0);
-  std::vector<double> out_s(90000, 0);
+  std::vector<double> MatrixC(90000, 300);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -51,7 +51,7 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(300, out[0]);
+    for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
   }
 }
 TEST(MPI_parallel_perf_test, my_test_task_run) {
@@ -61,7 +61,7 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   std::vector<double> matrixA(90000, 1);
   std::vector<double> matrixB(90000, 1);
   std::vector<double> out(90000, 0);
-  std::vector<double> out_s(90000, 0);
+  std::vector<double> MatrixC(90000, 300);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -97,6 +97,6 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(300, out[0]);
+    for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
   }
 }

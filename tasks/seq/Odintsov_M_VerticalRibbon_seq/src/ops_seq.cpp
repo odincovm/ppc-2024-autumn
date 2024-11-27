@@ -65,8 +65,6 @@ bool Odintsov_M_VerticalRibbon_seq::VerticalRibbonSequential::run() {
       // Умножаем строку из A на столбец из B
       for (int k = 0; k < szB[1]; k++) {
         matrixC[Arow * szC[1] + i] += matrixA[Arow * szA[2] + k] * ribbon[k];
-        // std::cerr << "Значение " << matrixC[Arow * szC[1] + i] << " A: " << matrixA[Arow * szA[1] + k]
-        //  << " B:  " << ribbon[k]<<  " Итерация " << k << " \n";
       }
     }
   }

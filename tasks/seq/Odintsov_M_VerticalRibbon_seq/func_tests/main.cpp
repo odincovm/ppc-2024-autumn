@@ -34,7 +34,7 @@ TEST(Sequential_multy, sz_10000) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  for (int i = 0; i < matrixC.size(); i++) 
+  for (size_t i = 0; i < matrixC.size(); i++) 
 	ASSERT_EQ(matrixC[i], out[i]);
 }
 TEST(Sequential_multy, sz_90000) {
@@ -65,7 +65,7 @@ TEST(Sequential_multy, sz_90000) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  for (int i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 TEST(Sequential_multy, dfsz_1200) {
   // Увеличить размер матрицы
@@ -97,7 +97,7 @@ TEST(Sequential_multy, dfsz_1200) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  for (int i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 
 

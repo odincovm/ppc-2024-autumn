@@ -1,14 +1,11 @@
 ﻿#include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
 
-
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <thread>
-#include <cmath>
 using namespace std::chrono_literals;
-
-
 
 namespace Odintsov_M_VerticalRibbon_mpi {
 // Последовательная версия
@@ -164,14 +161,13 @@ bool VerticalRibbonMPIParallel::run() {
   // Отправить ленты
   if (com.rank() == 0) {
     // Для каждго потока
-    for (int pr = 1; pr < com.size(); pr++) {
+    for (size_t pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
-      // Формаруем ленту 
+      // Формаруем ленту
       // Сделать - корриктировку по кол-ву потоков
-     
+
       // По каждой ленте
-      for (int j = 0; j < szB[1]; j++)
-       {
+      for (int j = 0; j < szB[1]; j++) {
         int startcol = pr * ribbon_sz;
         int endcol = (pr + 1) * ribbon_sz;
         // По каждой строке B
@@ -180,32 +176,31 @@ bool VerticalRibbonMPIParallel::run() {
         }
       }
 
-      // Отправляем ленту 
+      // Отправляем ленту
       com.send(pr, 0, ribbon.data(), ribbon.size());
     }
   }
 
   // Получение ленты
-  if (com.rank()== 0) {
+  if (com.rank() == 0) {
     for (int j = 0; j < szB[1]; j++) {
-      for (int i = 0; i < ribbon_sz; i++)
-       {
+      for (int i = 0; i < ribbon_sz; i++) {
         local_ribbon.push_back(matrixB[szB[2] * j + i]);
-       }
+      }
     }
   } else {
-      // Корректировку по кол-ву потоков
+    // Корректировку по кол-ву потоков
 
-      std::vector<double> buffer(ribbon_sz * szB[1], 0);
-      com.recv(0, 0, buffer.data(), buffer.size());
-      local_ribbon.insert(local_ribbon.end(), buffer.begin(), buffer.end());
+    std::vector<double> buffer(ribbon_sz * szB[1], 0);
+    com.recv(0, 0, buffer.data(), buffer.size());
+    local_ribbon.insert(local_ribbon.end(), buffer.begin(), buffer.end());
   }
 
   // Реализация
-  
+
   // По каждой строке A
   for (int Bcol = 0; Bcol < ribbon_sz; Bcol++) {
-    // По количеству столбцов в ленте  
+    // По количеству столбцов в ленте
     for (int Arow = 0; Arow < szA[1]; Arow++) {
       double sum = 0;
       // Умножаем столбец B на строку А
@@ -216,26 +211,22 @@ bool VerticalRibbonMPIParallel::run() {
     }
   }
 
+  gather(com, local_mC.data(), local_mC.size(), matrixC, 0);
 
-   gather(com, local_mC.data(), local_mC.size(), matrixC, 0);
-   
-   if (com.rank() == 0) {
-     // Транчпонируем матрицу
-     std::vector<double> transposed(matrixC.size());
+  if (com.rank() == 0) {
+    // Транчпонируем матрицу
+    std::vector<double> transposed(matrixC.size());
 
-     // Перемещаем элементы из исходной матрицы в транспонированную
-     for (int i = 0; i < szC[1]; ++i) {
-       for (int j = 0; j < szC[2]; ++j) {
-         transposed[j * szC[1] + i] = matrixC[i * szC[2] + j];
-       }
-     }
-     matrixC = std::move(transposed);
-     
-   }
+    // Перемещаем элементы из исходной матрицы в транспонированную
+    for (int i = 0; i < szC[1]; ++i) {
+      for (int j = 0; j < szC[2]; ++j) {
+        transposed[j * szC[1] + i] = matrixC[i * szC[2] + j];
+      }
+    }
+    matrixC = std::move(transposed);
+  }
 
- 
   return true;
- 
 }
 
 bool VerticalRibbonMPIParallel::post_processing() {
@@ -247,5 +238,4 @@ bool VerticalRibbonMPIParallel::post_processing() {
   }
   return true;
 }
-};
-
+};  // namespace Odintsov_M_VerticalRibbon_mpi

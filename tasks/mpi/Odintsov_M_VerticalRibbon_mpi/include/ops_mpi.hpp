@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 #include <boost/mpi/collectives.hpp>
 #include <boost/mpi/communicator.hpp>
 #include <string>
@@ -9,15 +8,11 @@
 
 #include "core/task/include/task.hpp"
 
-
-
-
 namespace Odintsov_M_VerticalRibbon_mpi {
 
 class VerticalRibbonMPISequential : public ppc::core::Task {
-
  public:
-  explicit VerticalRibbonMPISequential(std::shared_ptr<ppc::core::TaskData> taskData_): Task(std::move(taskData_)) {}
+  explicit VerticalRibbonMPISequential(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
   bool pre_processing() override;
   bool validation() override;
   bool run() override;
