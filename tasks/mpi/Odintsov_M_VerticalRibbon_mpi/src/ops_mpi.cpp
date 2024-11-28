@@ -129,17 +129,14 @@ bool VerticalRibbonMPIParallel::run() {
     szA.resize(3);
     szB.resize(3);
   }
-  for (int i = 0; i < 3; i++) {
-    broadcast(com, szA[i], 0);
-    broadcast(com, szB[i], 0);
-  }
+  broadcast(com, szA.data(), szA.size(), 0);
+  broadcast(com, szB.data(), szB.size(), 0);
 
   if (com.rank() != 0) {
     matrixA.resize(szA[0]);
   }
-  for (int i = 0; i < szA[0]; i++) {
-    broadcast(com, matrixA[i], 0);
-  }
+
+  broadcast(com, matrixA.data(), matrixA.size(), 0);
 
   if (com.rank() == 0) {
     ribbon_sz = (szB[2] + com.size() - 1) / com.size();
@@ -150,11 +147,9 @@ bool VerticalRibbonMPIParallel::run() {
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
-
+      int startcol = pr * ribbon_sz;
+      int endcol = (pr + 1) * ribbon_sz;
       for (int j = 0; j < szB[1]; j++) {
-        int startcol = pr * ribbon_sz;
-        int endcol = (pr + 1) * ribbon_sz;
-
         for (int i = startcol; i < endcol; i++) {
           ribbon.push_back(matrixB[szB[2] * j + i]);
         }
@@ -179,7 +174,6 @@ bool VerticalRibbonMPIParallel::run() {
   for (int Bcol = 0; Bcol < ribbon_sz; Bcol++) {
     for (int Arow = 0; Arow < szA[1]; Arow++) {
       double sum = 0;
-
       for (int k = 0; k < szB[1]; k++) {
         sum += matrixA[Arow * szA[2] + k] * local_ribbon[k * ribbon_sz + Bcol];
       }
