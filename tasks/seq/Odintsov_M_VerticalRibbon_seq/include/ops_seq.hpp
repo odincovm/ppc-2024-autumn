@@ -19,7 +19,7 @@ class VerticalRibbonSequential : public ppc::core::Task {
   std ::vector<double> matrixA;
   std::vector<double> matrixB;
   std::vector<double> matrixC;
-  // [0] - размер, [1] - количество строк, [2] - количество столбцов
+  // [0] - size, [1] - row, [2] - col
   std::vector<int> szA;
   std::vector<int> szB;
   std::vector<int> szC;

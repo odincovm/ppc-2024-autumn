@@ -10,8 +10,8 @@
 
 std::vector<double> getMatrix(int sz) {
   std::vector<double> matrix(sz, 0);
-  std::random_device rd;   // Источник случайности
-  std::mt19937 gen(rd());  // Генератор на основе Mersenne Twister
+  std::random_device rd;  
+  std::mt19937 gen(rd());  
   std::uniform_real_distribution<double> dis(0, 10);
   for (int i = 0; i < sz; ++i) {
     matrix[i] = dis(gen);

@@ -65,7 +65,6 @@ TEST(Sequential_multy, sz_40000) {
   for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
 }
 TEST(Sequential_multy, dfsz_1200) {
-  // Увеличить размер матрицы
   // Create data
   std::vector<double> matrixA(1200, 1);
   std::vector<double> matrixB(1200, 1);
