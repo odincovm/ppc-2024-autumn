@@ -7,39 +7,37 @@
 #include "core/perf/include/perf.hpp"
 #include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
 
-TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
+TEST(Odincov_M_VerticalRibbon_MPI_parallel_perf_test, my_test_pipeline_run) {
   // Create data
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA(90000, 1);
-  std::vector<double> matrixB(90000, 1);
-  std::vector<double> out(90000, 0);
-  std::vector<double> MatrixC(90000, 300);
+  std::vector<double> matrixA(14400, 1);
+  std::vector<double> vectorB(120, 1);
+  std::vector<double> out(120, 0);
+  std::vector<double> out_s(120, 120);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
-    taskDataPar->inputs_count.emplace_back(90000);
-    taskDataPar->inputs_count.emplace_back(300);
-    taskDataPar->inputs_count.emplace_back(90000);
-    taskDataPar->inputs_count.emplace_back(300);
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(vectorB.data()));
+    taskDataPar->inputs_count.emplace_back(14400);
+    taskDataPar->inputs_count.emplace_back(120);
+    taskDataPar->inputs_count.emplace_back(120);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataPar->outputs_count.emplace_back(90000);
-    taskDataPar->outputs_count.emplace_back(300);
+    taskDataPar->outputs_count.emplace_back(120);
   }
   // Create Task
   auto testClassPar = std::make_shared<Odintsov_M_VerticalRibbon_mpi::VerticalRibbonMPIParallel>(taskDataPar);
-  ASSERT_EQ(testClassPar->validation(), true);
+  ASSERT_TRUE(testClassPar->validation());
   testClassPar->pre_processing();
   testClassPar->run();
   testClassPar->post_processing();
 
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
-  perfAttr->num_running = 10;
+  perfAttr->num_running = 100;
   const boost::mpi::timer current_timer;
   perfAttr->current_timer = [&] { return current_timer.elapsed(); };
 
@@ -51,30 +49,29 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    for (size_t i = 0; i < MatrixC.size(); i++) ASSERT_EQ(MatrixC[i], out[i]);
+    EXPECT_EQ(out_s, out);
   }
 }
-TEST(MPI_parallel_perf_test, my_test_task_run) {
+TEST(Odincov_M_VerticalRibbon_MPI_parallel_perf_test, my_test_task_run) {
+  // Create data
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA(90000, 1);
-  std::vector<double> matrixB(90000, 1);
-  std::vector<double> out(90000, 0);
-  std::vector<double> MatrixC(90000, 300);
+  std::vector<double> matrixA(14400, 1);
+  std::vector<double> vectorB(120, 1);
+  std::vector<double> out(120, 0);
+  std::vector<double> out_s(120, 120);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
-    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
-    taskDataPar->inputs_count.emplace_back(90000);
-    taskDataPar->inputs_count.emplace_back(300);
-    taskDataPar->inputs_count.emplace_back(90000);
-    taskDataPar->inputs_count.emplace_back(300);
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(vectorB.data()));
+    taskDataPar->inputs_count.emplace_back(14400);
+    taskDataPar->inputs_count.emplace_back(120);
+    taskDataPar->inputs_count.emplace_back(120);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataPar->outputs_count.emplace_back(90000);
-    taskDataPar->outputs_count.emplace_back(300);
+    taskDataPar->outputs_count.emplace_back(120);
   }
   // Create Task
   auto testClassPar = std::make_shared<Odintsov_M_VerticalRibbon_mpi::VerticalRibbonMPIParallel>(taskDataPar);
@@ -85,7 +82,7 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
 
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
-  perfAttr->num_running = 10;
+  perfAttr->num_running = 100;
   const boost::mpi::timer current_timer;
   perfAttr->current_timer = [&] { return current_timer.elapsed(); };
 
@@ -97,6 +94,6 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    for (size_t i = 0; i < MatrixC.size(); i++) ASSERT_EQ(MatrixC[i], out[i]);
+    EXPECT_EQ(out_s, out);
   }
 }

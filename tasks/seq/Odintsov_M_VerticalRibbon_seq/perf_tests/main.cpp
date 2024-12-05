@@ -6,25 +6,23 @@
 
 #include "core/perf/include/perf.hpp"
 
-TEST(sequential_matrix_perf_test, matrix_test_pipeline_run) {
-  // Create data
-  std::vector<double> matrixA(10000, 1);
-  std::vector<double> matrixB(10000, 1);
+TEST(Odintsov_M_VerticalRibbon_perf_test_seq, matrix_test_pipeline_run) {
+  std::vector<double> matrixA(1000000, 1);
+  std::vector<double> vectorB(1000, 1);
 
-  std::vector<double> matrixC(10000, 100);
-  std::vector<double> out(matrixC.size(), 0);
+  std::vector<double> vectorC(1000, 1000);
+  std::vector<double> out(vectorC.size(), 0);
 
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
-  taskDataSeq->inputs_count.emplace_back(10000);
-  taskDataSeq->inputs_count.emplace_back(100);
-  taskDataSeq->inputs_count.emplace_back(10000);
-  taskDataSeq->inputs_count.emplace_back(100);
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(vectorB.data()));
+  // [0] - szA [1] - rowA [2] - szB
+  taskDataSeq->inputs_count.emplace_back(1000000);
+  taskDataSeq->inputs_count.emplace_back(1000);
+  taskDataSeq->inputs_count.emplace_back(1000);
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-  taskDataSeq->outputs_count.emplace_back(10000);
-  taskDataSeq->outputs_count.emplace_back(100);
+  taskDataSeq->outputs_count.emplace_back(out.size());
 
   // Create Task
   auto testClass = std::make_shared<Odintsov_M_VerticalRibbon_seq::VerticalRibbonSequential>(taskDataSeq);
@@ -49,28 +47,26 @@ TEST(sequential_matrix_perf_test, matrix_test_pipeline_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  EXPECT_EQ(vectorC, out);
 }
 
-TEST(sequential_my_perf_test, test_task_run) {
-  // Create data
-  std::vector<double> matrixA(10000, 1);
-  std::vector<double> matrixB(10000, 1);
+TEST(Odintsov_M_VerticalRibbon_perf_test_seq, test_task_run) {
+  std::vector<double> matrixA(1000000, 1);
+  std::vector<double> vectorB(1000, 1);
 
-  std::vector<double> matrixC(10000, 100);
-  std::vector<double> out(matrixC.size(), 0);
+  std::vector<double> vectorC(1000, 1000);
+  std::vector<double> out(vectorC.size(), 0);
 
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
-  taskDataSeq->inputs_count.emplace_back(10000);
-  taskDataSeq->inputs_count.emplace_back(100);
-  taskDataSeq->inputs_count.emplace_back(10000);
-  taskDataSeq->inputs_count.emplace_back(100);
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(vectorB.data()));
+  // [0] - szA [1] - rowA [2] - szB
+  taskDataSeq->inputs_count.emplace_back(1000000);
+  taskDataSeq->inputs_count.emplace_back(1000);
+  taskDataSeq->inputs_count.emplace_back(1000);
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-  taskDataSeq->outputs_count.emplace_back(10000);
-  taskDataSeq->outputs_count.emplace_back(100);
+  taskDataSeq->outputs_count.emplace_back(out.size());
 
   // Create Task
   auto testClass = std::make_shared<Odintsov_M_VerticalRibbon_seq::VerticalRibbonSequential>(taskDataSeq);
@@ -94,5 +90,5 @@ TEST(sequential_my_perf_test, test_task_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  for (size_t i = 0; i < matrixC.size(); i++) ASSERT_EQ(matrixC[i], out[i]);
+  EXPECT_EQ(vectorC, out);
 }

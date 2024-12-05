@@ -17,12 +17,12 @@ class VerticalRibbonSequential : public ppc::core::Task {
 
  private:
   std ::vector<double> matrixA;
-  std::vector<double> matrixB;
-  std::vector<double> matrixC;
+  std::vector<double> vectorB;
+  std::vector<double> vectorC;
   // [0] - size, [1] - row, [2] - col
-  std::vector<int> szA;
-  std::vector<int> szB;
-  std::vector<int> szC;
+  int colA, rowA;
+  int szA;
+  int szB;
 };
 
 }  // namespace Odintsov_M_VerticalRibbon_seq

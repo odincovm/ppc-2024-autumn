@@ -20,12 +20,12 @@ class VerticalRibbonMPISequential : public ppc::core::Task {
 
  private:
   std ::vector<double> matrixA;
-  std::vector<double> matrixB;
-  std::vector<double> matrixC;
+  std::vector<double> vectorB;
+  std::vector<double> vectorC;
   // [0] - size, [1] - row, [2] - col
-  std::vector<int> szA;
-  std::vector<int> szB;
-  std::vector<int> szC;
+  int colA, rowA;
+  int szA;
+  int szB;
 };
 
 class VerticalRibbonMPIParallel : public ppc::core::Task {
@@ -38,15 +38,15 @@ class VerticalRibbonMPIParallel : public ppc::core::Task {
 
  private:
   std::vector<double> local_ribbon;
-  std::vector<double> local_mC;
   int ribbon_sz;
   std ::vector<double> matrixA;
-  std::vector<double> matrixB;
-  std::vector<double> matrixC;
+  std::vector<double> vectorB;
+  std::vector<double> vectorC;
+  std::vector<double> localC;
   // [0] - size, [1] - row, [2] - col
-  std::vector<int> szA;
-  std::vector<int> szB;
-  std::vector<int> szC;
+  int colA, rowA = 0;
+  int szA;
+  int szB;
   boost::mpi::communicator com;
 };
 }  // namespace Odintsov_M_VerticalRibbon_mpi
