@@ -108,18 +108,18 @@ bool VerticalRibbonMPIParallel::run() {
   vectorB.resize(colA, 0);
 
   broadcast(com, vectorB.data(), colA, 0);
-  loc_ribbon_sz = ribbon_sz;
+
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
       int startcol = pr * ribbon_sz;
       int endcol = (pr + 1) * ribbon_sz;
-      for (int j = 0; j < rowA; j++) {
-        for (int i = startcol; i < endcol; i++) {
-          ribbon.push_back(matrixA[colA * j + i]);
-        }
-      }
       if (endcol <= colA) {
+        for (int j = 0; j < rowA; j++) {
+          for (int i = startcol; i < endcol; i++) {
+            ribbon.push_back(matrixA[colA * j + i]);
+          }
+        }
         com.send(pr, 0, ribbon.data(), ribbon.size());
       }
     }
