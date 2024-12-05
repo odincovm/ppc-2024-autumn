@@ -143,7 +143,7 @@ bool VerticalRibbonMPIParallel::run() {
     }
   }
 
-  for (int k = 0; k < localC.size(); k++) {
+  for (size_t k = 0; k < localC.size(); k++) {
     reduce(com, localC[k], vectorC[k], std::plus(), 0.0);
   }
   return true;
@@ -152,7 +152,7 @@ bool VerticalRibbonMPIParallel::run() {
 bool VerticalRibbonMPIParallel::post_processing() {
   internal_order_test();
   if (com.rank() == 0) {
-    for (int i = 0; i < vectorC.size(); i++) {
+    for (size_t i = 0; i < vectorC.size(); i++) {
       reinterpret_cast<double *>(taskData->outputs[0])[i] = vectorC[i];
     }
   }
