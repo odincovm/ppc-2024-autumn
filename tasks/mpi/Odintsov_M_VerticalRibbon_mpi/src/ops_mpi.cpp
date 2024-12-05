@@ -142,7 +142,7 @@ bool VerticalRibbonMPIParallel::run() {
   }
   // Calculate
   localC.assign(rowA, 0);
-  if (local_ribbon.size() != 0) {
+  if (!local_ribbon.empty()) {
     for (int i = 0; i < ribbon_sz; i++) {
       for (int j = 0; j < rowA; j++) {
         localC[j] += local_ribbon[ribbon_sz * j + i] * vectorB[com.rank() * ribbon_sz + i];
