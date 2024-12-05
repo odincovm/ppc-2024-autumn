@@ -1,11 +1,11 @@
 ﻿
 #include <gtest/gtest.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <random>
 #include <vector>
 

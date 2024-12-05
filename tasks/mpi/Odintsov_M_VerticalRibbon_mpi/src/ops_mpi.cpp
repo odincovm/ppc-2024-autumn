@@ -98,7 +98,7 @@ bool VerticalRibbonMPIParallel::run() {
   internal_order_test();
 
   if (com.rank() == 0) {
-    ribbon_sz = (colA + com.size() - 1) / com.size();
+    ribbon_sz = std::max(1, (colA + com.size() - 1) / com.size());
   }
 
   // fflush(stdout);
@@ -108,7 +108,7 @@ bool VerticalRibbonMPIParallel::run() {
   vectorB.resize(colA, 0);
 
   broadcast(com, vectorB.data(), colA, 0);
-
+  loc_ribbon_sz = ribbon_sz;
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
       std::vector<double> ribbon;
@@ -119,7 +119,9 @@ bool VerticalRibbonMPIParallel::run() {
           ribbon.push_back(matrixA[colA * j + i]);
         }
       }
-      com.send(pr, 0, ribbon.data(), ribbon.size());
+      if (endcol <= colA) {
+        com.send(pr, 0, ribbon.data(), ribbon.size());
+      }
     }
   }
   if (com.rank() == 0) {
@@ -129,17 +131,22 @@ bool VerticalRibbonMPIParallel::run() {
       }
     }
   } else {
-    std::vector<double> buffer(ribbon_sz * rowA, 0);
-    com.recv(0, 0, buffer.data(), buffer.size());
-    local_ribbon.insert(local_ribbon.end(), buffer.begin(), buffer.end());
+    if (com.rank() * ribbon_sz <= colA) {
+      int endcol = (com.rank() + 1) * ribbon_sz;
+      std::vector<double> buffer(ribbon_sz * rowA, 0);
+      if (endcol <= colA) {
+        com.recv(0, 0, buffer.data(), buffer.size());
+        local_ribbon.insert(local_ribbon.end(), buffer.begin(), buffer.end());
+      }
+    }
   }
   // Calculate
-
-  fflush(stdout);
   localC.assign(rowA, 0);
-  for (int i = 0; i < ribbon_sz; i++) {
-    for (int j = 0; j < rowA; j++) {
-      localC[j] += local_ribbon[ribbon_sz * j + i] * vectorB[com.rank() * ribbon_sz + i];
+  if (local_ribbon.size() != 0) {
+    for (int i = 0; i < ribbon_sz; i++) {
+      for (int j = 0; j < rowA; j++) {
+        localC[j] += local_ribbon[ribbon_sz * j + i] * vectorB[com.rank() * ribbon_sz + i];
+      }
     }
   }
 
