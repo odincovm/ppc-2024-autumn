@@ -15,7 +15,7 @@ std::vector<double> getMatrix(int sz) {
   std::vector<double> matrix(sz, 0);
   int min = -100;
   int max = 100;
-  srand(time(NULL));
+  srand(time(nullptr));
   for (int i = 0; i < sz; ++i) {
     matrix[i] = min + rand() % (max - min + 1);
   }
