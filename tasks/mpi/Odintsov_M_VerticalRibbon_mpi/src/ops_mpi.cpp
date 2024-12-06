@@ -124,6 +124,7 @@ bool VerticalRibbonMPIParallel::run() {
       }
     }
   }
+
   if (com.rank() == 0) {
     for (int j = 0; j < rowA; j++) {
       for (int i = 0; i < ribbon_sz; i++) {
@@ -140,6 +141,7 @@ bool VerticalRibbonMPIParallel::run() {
       }
     }
   }
+
   // Calculate
   localC.assign(rowA, 0);
   if (!local_ribbon.empty()) {
@@ -149,10 +151,11 @@ bool VerticalRibbonMPIParallel::run() {
       }
     }
   }
-  size_t szC = vectorC.size();
+  size_t szC = localC.size();
   for (size_t k = 0; k < szC; k++) {
     reduce(com, localC[k], vectorC[k], std::plus(), 0.0);
   }
+
   return true;
 }
 

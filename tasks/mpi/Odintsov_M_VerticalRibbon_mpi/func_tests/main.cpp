@@ -23,7 +23,6 @@ std::vector<double> getMatrixorVector(int min, int max, int sz) {
 TEST(Odintsov_M_VerticalRibbon_mpi, sz_4) {
   // Create data
   boost::mpi::communicator com;
-
   // Create data
   std::vector<double> matrixA = getMatrixorVector(-100, 100, 4);
   std::vector<double> vectorB = getMatrixorVector(-100, 100, 2);
@@ -48,7 +47,6 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_4) {
   testClassPar.pre_processing();
   testClassPar.run();
   testClassPar.post_processing();
-
   if (com.rank() == 0) {
     std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
