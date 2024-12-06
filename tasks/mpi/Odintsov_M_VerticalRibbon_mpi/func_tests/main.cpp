@@ -25,8 +25,8 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_4) {
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA = {1, 2, 3, 4};
-  std::vector<double> vectorB = {1, 2};
+  std::vector<double> matrixA = getMatrixorVector(-100, 100, 4);
+  std::vector<double> vectorB = getMatrixorVector(-100, 100, 2);
   std::vector<double> out(2, 0);
   std::vector<double> out_s(2, 0);
 
