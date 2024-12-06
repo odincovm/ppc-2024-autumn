@@ -11,10 +11,8 @@
 
 #include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
 
-std::vector<double> getMatrix(int sz) {
+std::vector<double> getMatrixorVector(int min, int max, int sz) {
   std::vector<double> matrix(sz, 0);
-  int min = -100;
-  int max = 100;
   srand(time(nullptr));
   for (int i = 0; i < sz; ++i) {
     matrix[i] = min + rand() % (max - min + 1);
@@ -74,8 +72,8 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_3600) {
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA = getMatrix(3600);
-  std::vector<double> vectorB = getMatrix(60);
+  std::vector<double> matrixA = getMatrixorVector(-100, 100, 3600);
+  std::vector<double> vectorB = getMatrixorVector(-100, 100, 60);
   std::vector<double> out(60, 0);
   std::vector<double> out_s(60, 0);
 
@@ -118,15 +116,15 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_3600) {
   }
 }
 
-TEST(Odintsov_M_VerticalRibbon_mpi, sz_1800) {
+TEST(Odintsov_M_VerticalRibbon_mpi, dif_sz_1800) {
   // Create data
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA = getMatrix(1800);
-  std::vector<double> matrixB = getMatrix(60);
-  std::vector<double> out(60, 0);
-  std::vector<double> out_s(60, 0);
+  std::vector<double> matrixA = getMatrixorVector(-100, 100, 1800);
+  std::vector<double> matrixB = getMatrixorVector(-100, 100, 60);
+  std::vector<double> out(30, 0);
+  std::vector<double> out_s(30, 0);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -134,10 +132,10 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_1800) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixA.data()));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(matrixB.data()));
     taskDataPar->inputs_count.emplace_back(1800);
-    taskDataPar->inputs_count.emplace_back(30);
+    taskDataPar->inputs_count.emplace_back(30);  // 30 - количество строк в матрице A а 60 - количество столбцов
     taskDataPar->inputs_count.emplace_back(60);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
-    taskDataPar->outputs_count.emplace_back(60);
+    taskDataPar->outputs_count.emplace_back(30);
   }
 
   // Create Task
