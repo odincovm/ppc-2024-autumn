@@ -11,6 +11,7 @@
 
 #include "mpi/Odintsov_M_VerticalRibbon_mpi/include/ops_mpi.hpp"
 
+namespace Odintsov_M_VerticalRibbon_mpi {
 std::vector<double> getMatrixorVector(int min, int max, int sz) {
   std::vector<double> matrix(sz, 0);
   srand(time(nullptr));
@@ -19,13 +20,14 @@ std::vector<double> getMatrixorVector(int min, int max, int sz) {
   }
   return matrix;
 }
+}  // namespace Odintsov_M_VerticalRibbon_mpi
 
 TEST(Odintsov_M_VerticalRibbon_mpi, sz_4) {
   // Create data
   boost::mpi::communicator com;
   // Create data
-  std::vector<double> matrixA = getMatrixorVector(-100, 100, 4);
-  std::vector<double> vectorB = getMatrixorVector(-100, 100, 2);
+  std::vector<double> matrixA = Odintsov_M_VerticalRibbon_mpi::getMatrixorVector(-100, 100, 4);
+  std::vector<double> vectorB = Odintsov_M_VerticalRibbon_mpi::getMatrixorVector(-100, 100, 2);
   std::vector<double> out(2, 0);
   std::vector<double> out_s(2, 0);
 
@@ -70,8 +72,8 @@ TEST(Odintsov_M_VerticalRibbon_mpi, sz_3600) {
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA = getMatrixorVector(-100, 100, 3600);
-  std::vector<double> vectorB = getMatrixorVector(-100, 100, 60);
+  std::vector<double> matrixA = Odintsov_M_VerticalRibbon_mpi ::getMatrixorVector(-100, 100, 3600);
+  std::vector<double> vectorB = Odintsov_M_VerticalRibbon_mpi ::getMatrixorVector(-100, 100, 60);
   std::vector<double> out(60, 0);
   std::vector<double> out_s(60, 0);
 
@@ -119,8 +121,8 @@ TEST(Odintsov_M_VerticalRibbon_mpi, dif_sz_1800) {
   boost::mpi::communicator com;
 
   // Create data
-  std::vector<double> matrixA = getMatrixorVector(-100, 100, 1800);
-  std::vector<double> matrixB = getMatrixorVector(-100, 100, 60);
+  std::vector<double> matrixA = Odintsov_M_VerticalRibbon_mpi ::getMatrixorVector(-100, 100, 1800);
+  std::vector<double> matrixB = Odintsov_M_VerticalRibbon_mpi ::getMatrixorVector(-100, 100, 60);
   std::vector<double> out(30, 0);
   std::vector<double> out_s(30, 0);
 
