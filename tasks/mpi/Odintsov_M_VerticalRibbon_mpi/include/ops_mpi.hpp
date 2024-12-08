@@ -37,8 +37,8 @@ class VerticalRibbonMPIParallel : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  std::vector<double> local_ribbon;
   int ribbon_sz;
+  std::vector<double> local_ribbon;
   std ::vector<double> matrixA;
   std::vector<double> vectorB;
   std::vector<double> vectorC;
