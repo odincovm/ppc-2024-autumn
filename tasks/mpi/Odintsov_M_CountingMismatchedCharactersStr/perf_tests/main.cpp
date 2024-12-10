@@ -6,10 +6,10 @@
 #include "core/perf/include/perf.hpp"
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
+TEST(Odintsov_m_MPI_parallel_perf_test, my_test_pipeline_run) {
   boost::mpi::communicator com;
-  char str1[] = "qbrkyndjjobh";
-  char str2[] = "qellowhwmvpt";
+  char str1[] = "qbrkyndjjobhqbrkyndjjobh";
+  char str2[] = "qellowhwmvptqbrkyndjjobh";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -44,13 +44,13 @@ TEST(MPI_parallel_perf_test, my_test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(10, out[0]);
+    ASSERT_EQ(22, out[0]);
   }
 }
-TEST(MPI_parallel_perf_test, my_test_task_run) {
+TEST(Odintsov_m_MPI_parallel_perf_test, my_test_task_run) {
   boost::mpi::communicator com;
-  char str1[] = "qbrkyndjjobh";
-  char str2[] = "qellowhwmvpt";
+  char str1[] = "qbrkyndjjobhqbrkyndjjobh";
+  char str2[] = "qellowhwmvptqbrkyndjjobh";
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
 
@@ -85,6 +85,6 @@ TEST(MPI_parallel_perf_test, my_test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(10, out[0]);
+    ASSERT_EQ(22, out[0]);
   }
 }
