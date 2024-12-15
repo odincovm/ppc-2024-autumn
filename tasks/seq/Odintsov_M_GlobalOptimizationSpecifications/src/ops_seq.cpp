@@ -10,7 +10,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecific
 
 double Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecificationsSequential::calculate_function(
     double x, double y) {
-  return pow(x - funct[0], 2) + pow(y - funct[1], 2);
+  return (x - funct[0]) * (x - funct[0]) + (y - funct[1]) * (y - funct[1]);
 }
 
 bool Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecificationsSequential::validation() {

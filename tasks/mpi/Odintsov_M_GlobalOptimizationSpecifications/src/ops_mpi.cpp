@@ -13,7 +13,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
 double
 Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::calculate_function(
     double x, double y) {
-  return pow(x - funct[0], 2) + pow(y - funct[1], 2);
+  return (x - funct[0]) * (x - funct[0]) + (y - funct[1])*(y-funct[1]);
 }
 
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::validation() {
@@ -126,7 +126,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
 
 double Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::calculate_function(
     double x, double y) {
-  return pow(x - funct[0], 2) + pow(y - funct[1], 2);
+  return (x - funct[0]) * (x - funct[0]) + (y - funct[1]) * (y - funct[1]);
 }
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::validation() {
   internal_order_test();
@@ -247,7 +247,8 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
           // Проверка и вычисление функции (выполняется только на потоке 0)
           if (com.rank() == 0) {
             bool flag = true;
-            for (int i = 0; i < is_corret.size(); i++) {
+            int sz = is_corret.size();
+            for (int i = 0; i < sz; i++) {
               if (is_corret[i] == 0) {
                 flag = false;
                 break;
