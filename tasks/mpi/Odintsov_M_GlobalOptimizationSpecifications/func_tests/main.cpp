@@ -3,29 +3,28 @@
 
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
-#include <vector>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <random>
+#include <vector>
+
 #include "mpi/Odintsov_M_GlobalOptimizationSpecifications/include/ops_mpi.hpp"
 
-
 static std::vector<double> createFunc(int min, int max) {
-  std::vector<double> func;
+  std::vector<double> func(2, 0);
   srand(time(nullptr));
   for (int i = 0; i < 2; i++) {
-    func.push_back(min + rand() % (max - min + 1));
+    func[i] = (min + rand() % (max - min + 1));
   }
   return func;
 }
 
-
 static std::vector<double> creareConstr(int min, int max, int count) {
-  std::vector<double> constr;
+  std::vector<double> constr(3 * count, 0);
   srand(time(nullptr));
-  for (int i = 0; i < 3*count; i++) {
-    constr.push_back(min + rand() % (max - min + 1));
+  for (int i = 0; i < 3 * count; i++) {
+    constr[i] = (min + rand() % (max - min + 1));
   }
   return constr;
 }
@@ -36,7 +35,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_1) {
   double step = 0.3;
   std::vector<double> area = {-10, 10, -10, 10};
   std::vector<double> func = createFunc(-10, 10);
-  std::vector<double> constraint = creareConstr(-10,10,36);
+  std::vector<double> constraint = creareConstr(-10, 10, 36);
   std::vector<double> out = {0};
   std::vector<double> out_s = {0};
   // Create Task Data Parallel
@@ -51,11 +50,11 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_1) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
-  
+
   // Create Task
   Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel testClassPar(
       taskDataPar);
-  
+
   ASSERT_EQ(testClassPar.validation(), true);
   testClassPar.pre_processing();
   testClassPar.run();
@@ -67,9 +66,8 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_1) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
     taskDataSeq->inputs_count.emplace_back(36);  // Количество ограничений
-    taskDataSeq->inputs_count.emplace_back(0);  // Режим
-  
-    
+    taskDataSeq->inputs_count.emplace_back(0);   // Режим
+
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());
     Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential testClassSeq(

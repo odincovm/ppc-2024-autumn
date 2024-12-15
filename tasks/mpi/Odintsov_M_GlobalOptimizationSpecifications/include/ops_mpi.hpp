@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <boost/mpi/collectives.hpp>
 #include <boost/mpi/communicator.hpp>
@@ -22,9 +22,9 @@ class GlobalOptimizationSpecificationsMPISequential : public ppc::core::Task {
   bool satisfies_constraints(double x, double y, int number_constraint);
   double calculate_function(double x, double y);
   double step;
-  std::vector<double> area;   // Содержит 4 числа - границы области
-  std::vector<double> funct;  // Содержит 2 числа (a,b) с помощью которых будет генерироваться функция (x-a)^2+(y-b)^2
-  std::vector<double> constraint;  // Каждое ограничение будет генерироваться 3 числами (a,b,c) a * x + b * y - c
+  std::vector<double> area;   // РЎРѕРґРµСЂР¶РёС‚ 4 С‡РёСЃР»Р° - РіСЂР°РЅРёС†С‹ РѕР±Р»Р°СЃС‚Рё
+  std::vector<double> funct;  // РЎРѕРґРµСЂР¶РёС‚ 2 С‡РёСЃР»Р° (a,b) СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂС‹С… Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ (x-a)^2+(y-b)^2
+  std::vector<double> constraint;  // РљР°Р¶РґРѕРµ РѕРіСЂР°РЅРёС‡РµРЅРёРµ Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ 3 С‡РёСЃР»Р°РјРё (a,b,c) a * x + b * y - c
   int ver;
   int count_constraint;
   double ans;
@@ -43,9 +43,9 @@ class GlobalOptimizationSpecificationsMPIParallel : public ppc::core::Task {
   bool satisfies_constraints(double x, double y, int number_constraint);
   double calculate_function(double x, double y);
   double step;
-  std::vector<double> area;   // Содержит 4 числа - границы области
-  std::vector<double> funct;  // Содержит 2 числа (a,b) с помощью которых будет генерироваться функция (x-a)^2+(y-b)^2
-  std::vector<double> constraint;  // Каждое ограничение будет генерироваться 3 числами (a,b,c) a * x + b * y - c
+  std::vector<double> area;   // РЎРѕРґРµСЂР¶РёС‚ 4 С‡РёСЃР»Р° - РіСЂР°РЅРёС†С‹ РѕР±Р»Р°СЃС‚Рё
+  std::vector<double> funct;  // РЎРѕРґРµСЂР¶РёС‚ 2 С‡РёСЃР»Р° (a,b) СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂС‹С… Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ (x-a)^2+(y-b)^2
+  std::vector<double> constraint;  // РљР°Р¶РґРѕРµ РѕРіСЂР°РЅРёС‡РµРЅРёРµ Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊСЃСЏ 3 С‡РёСЃР»Р°РјРё (a,b,c) a * x + b * y - c
   std::vector<double> local_constraint;
   int ver;
   int count_constraint;
@@ -55,4 +55,4 @@ class GlobalOptimizationSpecificationsMPIParallel : public ppc::core::Task {
   int loc_constr_size;
   std::vector<int> is_corret;
 };
-}  // namespace Odintsov_M_GlobalOptimizationSpecifications_seq_mpi
+}  // namespace Odintsov_M_GlobalOptimizationSpecifications_mpi

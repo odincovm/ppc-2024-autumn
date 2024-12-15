@@ -13,7 +13,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
 double
 Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::calculate_function(
     double x, double y) {
-  return (x - funct[0]) * (x - funct[0]) + (y - funct[1])*(y-funct[1]);
+  return (x - funct[0]) * (x - funct[0]) + (y - funct[1]) * (y - funct[1]);
 }
 
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::validation() {
@@ -55,33 +55,43 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
     ans = 999999999999999;
   else
     ans = -999999999999999;
-  double minX = -100;
-  double minY = -100;
+  // double minX = -100;
+  // double minY = -100;
   double current_step = step;                                // Текущий шаг сетки
   double tolerance = 1e-6;                                   // Точность выхода
   double previous_ans = std::numeric_limits<double>::max();  // Предыдущее значение минимальной функции
+  int scale_factor = static_cast<int>(1.0 / current_step);
   // Главный цикл уточнения сетки
   while (current_step >= tolerance) {
-    double local_minX = minX;
-    double local_minY = minY;
+    double local_minX = area[0];
+    double local_minY = area[2];
+
+    // Масштабируем границы для целочисленного цикла
+    int int_minX = static_cast<int>(area[0] * scale_factor);
+    int int_maxX = static_cast<int>(area[1] * scale_factor);
+    int int_minY = static_cast<int>(area[2] * scale_factor);
+    int int_maxY = static_cast<int>(area[3] * scale_factor);
 
     // Перебираем сетку с текущим шагом
-    for (double x = area[0]; x < area[1]; x += current_step) {
-      for (double y = area[2]; y < area[3]; y += current_step) {
+    for (int x = int_minX; x < int_maxX; x++) {
+      for (int y = int_minY; y < int_maxY; y++) {
+        double real_x = x / static_cast<double>(scale_factor);
+        double real_y = y / static_cast<double>(scale_factor);
+
         // Проверяем на ограничения
         bool is_point_correct = true;
         for (int i = 0; i < count_constraint; i++) {
-          is_point_correct = satisfies_constraints(x, y, i);
+          is_point_correct = satisfies_constraints(real_x, real_y, i);
           if (!is_point_correct) break;
         }
         // Если точка удовлетворяет ограничениям
         if (is_point_correct) {
-          double value = calculate_function(x, y);
+          double value = calculate_function(real_x, real_y);
           if (ver == 0) {  // Минимизация
             if (value < ans) {
               ans = value;
-              local_minX = x;
-              local_minY = y;
+              local_minX = real_x;
+              local_minY = real_y;
             }
           } else if (ver == 1) {  // Максимизация
             ans = std::max(ans, value);
@@ -99,6 +109,13 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
     area[1] = std::min(local_minX + 2 * current_step, area[1]);
     area[2] = std::max(local_minY - 2 * current_step, area[2]);
     area[3] = std::min(local_minY + 2 * current_step, area[3]);
+
+    // Пересчитываем масштабированные границы
+    int_minX = static_cast<int>(area[0] * scale_factor);
+    int_maxX = static_cast<int>(area[1] * scale_factor);
+    int_minY = static_cast<int>(area[2] * scale_factor);
+    int_maxY = static_cast<int>(area[3] * scale_factor);
+
     // Уменьшаем шаг сетки
     current_step /= 2.0;
     previous_ans = ans;
@@ -181,15 +198,14 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
 
   broadcast(com, area.data(), area.size(), 0);
 
-  // printf("Rank[%d]: After broadcasting area\n", com.rank());
   // fflush(stdout);
-  //  Передача ограничений потокам (без случая когда потоков больше)
+  //  Передача ограничений потокам
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
       if (pr * loc_constr_size < count_constraint) {
-        std::vector<double> send;
+        std::vector<double> send(3 * loc_constr_size, 0);
         for (int i = 0; i < 3 * loc_constr_size; i++) {
-          send.push_back(constraint[pr * loc_constr_size * 3 + i]);
+          send[i] = constraint[pr * loc_constr_size * 3 + i];
         }
         com.send(pr, 0, send.data(), send.size());
       }
@@ -199,17 +215,11 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
       local_constraint.push_back(constraint[i]);
     }
   } else if (com.rank() < count_constraint) {
-    // printf("soft lock 1\n");
-    // fflush(stdout);
     std::vector<double> buffer(loc_constr_size * 3, 0);
-
     com.recv(0, 0, buffer.data(), buffer.size());
-    // printf("soft lock 2\n");
-    // fflush(stdout);
     local_constraint.insert(local_constraint.end(), buffer.begin(), buffer.end());
   }
 
-  // printf("Rang %i Area %f %f %f %f \n", com.rank(), area[0], area[1], area[2], area[3]);
   // fflush(stdout);
   //  Вычисления
   double current_step = step;
@@ -219,19 +229,27 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   for (int i = 0; i < 4; i++) {
     loc_area.push_back(area[i]);
   }
+
   if (!local_constraint.empty()) {
     while (current_step >= tolerance) {
       double local_minX = loc_area[0];
       double local_minY = loc_area[2];
-      // fflush(stdout);
+      // Масштабирование диапазона для работы с int
+      int scale_factor = static_cast<int>(1.0 / current_step);
+      int int_minX = static_cast<int>(loc_area[0] * scale_factor);
+      int int_maxX = static_cast<int>(loc_area[1] * scale_factor);
+      int int_minY = static_cast<int>(loc_area[2] * scale_factor);
+      int int_maxY = static_cast<int>(loc_area[3] * scale_factor);
       //  Локальные вычисления на каждом потоке
-      for (double x = loc_area[0]; x < loc_area[1]; x += current_step) {
-        for (double y = loc_area[2]; y < loc_area[3]; y += current_step) {
-          // Локальная проверка ограничений
+      for (int x = int_minX; x < int_maxX; x++) {
+        for (int y = int_minY; y < int_maxY; y++) {
+          double real_x = x / static_cast<double>(scale_factor);
+          double real_y = y / static_cast<double>(scale_factor);
 
+          // Локальная проверка ограничений
           int loc_flag = 1;
           for (int i = 0; i < loc_constr_size; i++) {
-            if (!satisfies_constraints(x, y, i)) {
+            if (!satisfies_constraints(real_x, real_y, i)) {
               loc_flag = 0;
               break;
             }
@@ -251,12 +269,12 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
               }
             }
             if (flag) {
-              double value = calculate_function(x, y);
+              double value = calculate_function(real_x, real_y);
               if (ver == 0) {  // Минимизация
                 if (value < ans) {
                   ans = value;
-                  local_minX = x;
-                  local_minY = y;
+                  local_minX = real_x;
+                  local_minY = real_y;
                 }
               } else if (ver == 1) {  // Максимизация
                 ans = std::max(ans, value);
@@ -290,7 +308,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
       broadcast(com, current_step, 0);
     }
   }
-
   return true;
 }
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::post_processing() {

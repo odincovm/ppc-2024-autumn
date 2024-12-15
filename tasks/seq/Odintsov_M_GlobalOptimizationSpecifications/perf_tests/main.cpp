@@ -73,7 +73,7 @@ TEST(Odintsov_m_SequentialOptimal_perf_test, test_task_run) {
       std::make_shared<Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecificationsSequential>(
           taskDataSeq);
 
- // Create Perf attributes
+  // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 15;
   const auto t0 = std::chrono::high_resolution_clock::now();
@@ -85,7 +85,7 @@ TEST(Odintsov_m_SequentialOptimal_perf_test, test_task_run) {
 
   // Create and init perf results
   auto perfResults = std::make_shared<ppc::core::PerfResults>();
-  
+
   // Create Perf analyzer
   auto perfAnalyzer = std::make_shared<ppc::core::Perf>(testClass);
 

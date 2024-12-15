@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
+#include <boost/mpi/timer.hpp>
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
 #include "mpi/Odintsov_M_GlobalOptimizationSpecifications/include/ops_mpi.hpp"
-#include <boost/mpi/timer.hpp>
 
 TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_pipeline_run) {
   boost::mpi::communicator com;
@@ -33,7 +33,6 @@ TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_pipeline_run) {
       std::make_shared<Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel>(
           taskDataPar);
 
-
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 50;
@@ -48,9 +47,9 @@ TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_pipeline_run) {
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    EXPECT_NEAR(49.05, out[0], 0.0001);
+    EXPECT_NEAR(46.777778, out[0], 0.0001);
   }
-} 
+}
 
 TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_task_run) {
   boost::mpi::communicator com;
@@ -78,7 +77,6 @@ TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_task_run) {
       std::make_shared<Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel>(
           taskDataPar);
 
-
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 50;
@@ -93,6 +91,6 @@ TEST(Odintsov_m_OptimPar_MPI_perf_tests, test_task_run) {
   perfAnalyzer->task_run(perfAttr, perfResults);
   if (com.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    EXPECT_NEAR(49.05, out[0], 0.0001);
+    EXPECT_NEAR(46.777778, out[0], 0.0001);
   }
 }
