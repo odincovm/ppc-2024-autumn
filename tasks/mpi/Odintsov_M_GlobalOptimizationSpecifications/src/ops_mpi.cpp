@@ -55,8 +55,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
     ans = 999999999999999;
   else
     ans = -999999999999999;
-  double mX = 0;
-  double mY = 0;
   double minX = -100;
   double minY = -100;
   double current_step = step;                                // Текущий шаг сетки
