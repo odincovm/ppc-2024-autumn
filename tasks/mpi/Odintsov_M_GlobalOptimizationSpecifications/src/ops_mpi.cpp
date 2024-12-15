@@ -205,9 +205,9 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   double current_step = step;
   double tolerance = 1e-6;
   double previous_ans = std::numeric_limits<double>::max();
-  std::vector<double> loc_area(4,0);
+  std::vector<double> loc_area(4, 0);
   for (int i = 0; i < 4; i++) {
-    loc_area[i]=area[i];
+    loc_area[i] = area[i];
   }
 
   if (!local_constraint.empty()) {
