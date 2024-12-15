@@ -1,4 +1,4 @@
-
+ï»¿
 #include <gtest/gtest.h>
 
 #include <vector>
@@ -19,8 +19,8 @@ TEST(Odintsov_m_SequentialOptimal_perf_test, test_pipeline_run) {
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-  taskDataSeq->inputs_count.emplace_back(4);  // Êîëè÷åñòâî îãðàíè÷åíèé
-  taskDataSeq->inputs_count.emplace_back(0);  // Ðåæèì
+  taskDataSeq->inputs_count.emplace_back(4);  // ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ð¹
+  taskDataSeq->inputs_count.emplace_back(0);  // Ð ÐµÐ¶Ð¸Ð¼
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
   taskDataSeq->outputs_count.emplace_back(out.size());
   // Create Task
@@ -63,8 +63,8 @@ TEST(Odintsov_m_SequentialOptimal_perf_test, test_task_run) {
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
   taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-  taskDataSeq->inputs_count.emplace_back(4);  // Êîëè÷åñòâî îãðàíè÷åíèé
-  taskDataSeq->inputs_count.emplace_back(0);  // Ðåæèì
+  taskDataSeq->inputs_count.emplace_back(4);  // ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ð¹
+  taskDataSeq->inputs_count.emplace_back(0);  // Ð ÐµÐ¶Ð¸Ð¼
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
   taskDataSeq->outputs_count.emplace_back(out.size());
 
