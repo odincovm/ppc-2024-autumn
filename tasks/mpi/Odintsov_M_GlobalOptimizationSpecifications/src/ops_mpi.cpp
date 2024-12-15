@@ -80,8 +80,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
           if (ver == 0) {  // Минимизация
             if (value < ans) {
               ans = value;
-              mX = x;
-              mY = y;
               local_minX = x;
               local_minY = y;
             }
