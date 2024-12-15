@@ -1,29 +1,32 @@
+
 #include <gtest/gtest.h>
 
 #include <vector>
 
 #include "core/perf/include/perf.hpp"
-#include "seq/Odintsov_M_CountingMismatchedCharactersStr/include/ops_seq.hpp"
-TEST(sequential_my_perf_test, my_test_pipeline_run) {
-  // Create data
-  char* str1 = new char[6];
-  char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  std::vector<char*> in{str1, str2};
-  std::vector<int> out(1, 1);
+#include "seq/Odintsov_M_GlobalOptimizationSpecifications/include/ops_seq.hpp"
 
+TEST(Odintsov_m_SequentialOptimal_perf_test, test_pipeline_run) {
+  // Create data
+  double step = 0.01;
+  std::vector<double> area = {-10, 10, -10, 10};
+  std::vector<double> func = {5, 5};
+  std::vector<double> constraint = {1, 1, 1, 2, 1, 1, 2, 3, 1, 4, 1, 1};
+  std::vector<double> out = {0};
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
-  strcpy_s(str2, 6, "qello");
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
-  taskDataSeq->inputs_count.emplace_back(in.size());
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(area.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
+  taskDataSeq->inputs_count.emplace_back(4);  // Количество ограничений
+  taskDataSeq->inputs_count.emplace_back(0);  // Режим
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
   taskDataSeq->outputs_count.emplace_back(out.size());
-
   // Create Task
   auto testClass =
-      std::make_shared<Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential>(taskDataSeq);
+      std::make_shared<Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecificationsSequential>(
+          taskDataSeq);
 
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
@@ -44,30 +47,33 @@ TEST(sequential_my_perf_test, my_test_pipeline_run) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  ASSERT_EQ(8, out[0]);
+  EXPECT_NEAR(46.08, out[0], 0.000001);
 }
 
-TEST(sequential_my_perf_test, test_task_run) {
-  char* str1 = new char[6];
-  char* str2 = new char[6];
-  strcpy_s(str1, 6, "qwert");
-  strcpy_s(str2, 6, "qello");
-  std::vector<char*> in{str1, str2};
-  std::vector<int> out(1, 1);
-
+TEST(Odintsov_m_SequentialOptimal_perf_test, test_task_run) {
+  // Create data
+  double step = 0.01;
+  std::vector<double> area = {-10, 10, -10, 10};
+  std::vector<double> func = {5, 5};
+  std::vector<double> constraint = {1, 1, 1, 2, 1, 1, 2, 3, 1, 4, 1, 1};
+  std::vector<double> out(1, 0.0);
   // Create TaskData
   std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
-  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
-  taskDataSeq->inputs_count.emplace_back(in.size());
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(area.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
+  taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
+  taskDataSeq->inputs_count.emplace_back(4);  // Количество ограничений
+  taskDataSeq->inputs_count.emplace_back(0);  // Режим
   taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
   taskDataSeq->outputs_count.emplace_back(out.size());
 
   // Create Task
   auto testClass =
-      std::make_shared<Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential>(taskDataSeq);
+      std::make_shared<Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecificationsSequential>(
+          taskDataSeq);
 
-  // Create Perf attributes
+ // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 15;
   const auto t0 = std::chrono::high_resolution_clock::now();
@@ -79,12 +85,13 @@ TEST(sequential_my_perf_test, test_task_run) {
 
   // Create and init perf results
   auto perfResults = std::make_shared<ppc::core::PerfResults>();
-
+  
   // Create Perf analyzer
   auto perfAnalyzer = std::make_shared<ppc::core::Perf>(testClass);
+
   perfAnalyzer->task_run(perfAttr, perfResults);
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  ASSERT_EQ(8, out[0]);
+  EXPECT_NEAR(46.08, out[0], 0.000001);
 }
