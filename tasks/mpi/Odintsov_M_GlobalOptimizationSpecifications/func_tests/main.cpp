@@ -1,4 +1,4 @@
-
+ï»¿
 #include <gtest/gtest.h>
 
 #include <boost/mpi/communicator.hpp>
@@ -65,8 +65,8 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_1) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-    taskDataSeq->inputs_count.emplace_back(36);  // Êîëè÷åñòâî îãðàíè÷åíèé
-    taskDataSeq->inputs_count.emplace_back(0);   // Ðåæèì
+    taskDataSeq->inputs_count.emplace_back(36);  // ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ð¹
+    taskDataSeq->inputs_count.emplace_back(0);   // Ð ÐµÐ¶Ð¸Ð¼
 
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());
@@ -115,8 +115,8 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_2) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-    taskDataSeq->inputs_count.emplace_back(24);  // Êîëè÷åñòâî îãðàíè÷åíèé
-    taskDataSeq->inputs_count.emplace_back(0);   // Ðåæèì
+    taskDataSeq->inputs_count.emplace_back(24);  // ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ð¹
+    taskDataSeq->inputs_count.emplace_back(0);   // Ð ÐµÐ¶Ð¸Ð¼
 
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());
@@ -165,8 +165,8 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-    taskDataSeq->inputs_count.emplace_back(12);  // Êîëè÷åñòâî îãðàíè÷åíèé
-    taskDataSeq->inputs_count.emplace_back(1);   // Ðåæèì
+    taskDataSeq->inputs_count.emplace_back(12);  // ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð¸Ð¹
+    taskDataSeq->inputs_count.emplace_back(1);   // Ð ÐµÐ¶Ð¸Ð¼
 
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());

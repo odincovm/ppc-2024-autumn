@@ -107,12 +107,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_seq::GlobalOptimizationSpecific
     area[2] = std::max(local_minY - 2 * current_step, area[2]);
     area[3] = std::min(local_minY + 2 * current_step, area[3]);
 
-    // Пересчитываем масштабированные границы
-    int_minX = static_cast<int>(area[0] * scale_factor);
-    int_maxX = static_cast<int>(area[1] * scale_factor);
-    int_minY = static_cast<int>(area[2] * scale_factor);
-    int_maxY = static_cast<int>(area[3] * scale_factor);
-
     // Уменьшаем шаг сетки
     current_step /= 2.0;
     previous_ans = ans;
