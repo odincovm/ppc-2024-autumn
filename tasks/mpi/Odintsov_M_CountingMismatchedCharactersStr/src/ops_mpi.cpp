@@ -46,7 +46,7 @@ bool CountingCharacterMPISequential::run() {
 }
 bool CountingCharacterMPISequential::post_processing() {
   internal_order_test();
-  reinterpret_cast<size_t *>(taskData->outputs[0])[0] = ans;
+  reinterpret_cast<int *>(taskData->outputs[0])[0] = ans;
   return true;
 }
 
@@ -86,7 +86,7 @@ bool CountingCharacterMPIParallel::run() {
   internal_order_test();
 
   size_t loc_size = 0;
-  size_t loc_res = 0;
+  int loc_res = 0;
 
   if (com.rank() == 0) {
     loc_size = (strlen(input[0]) + com.size() - 1) / com.size();
@@ -96,7 +96,7 @@ bool CountingCharacterMPIParallel::run() {
 
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
-      size_t send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
+      int send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
 
       com.send(pr, 0, input[0] + pr * loc_size, send_size);
       com.send(pr, 0, input[1] + pr * loc_size, send_size);
@@ -117,7 +117,7 @@ bool CountingCharacterMPIParallel::run() {
     local_input.push_back(str2);
   }
 
-  size_t size_1 = local_input[0].size();
+  int size_1 = local_input[0].size();
 
   for (size_t i = 0; i < size_1; i++) {
     if (local_input[0][i] != local_input[1][i]) {
@@ -125,14 +125,14 @@ bool CountingCharacterMPIParallel::run() {
     }
   }
 
-  reduce(com, loc_res, ans, std::plus(), 0);
+  reduce(com, loc_res, ans, std::plus<int>(), 0);
   return true;
 }
 
 bool CountingCharacterMPIParallel::post_processing() {
   internal_order_test();
   if (com.rank() == 0) {
-    reinterpret_cast<size_t *>(taskData->outputs[0])[0] = ans;
+    reinterpret_cast<int *>(taskData->outputs[0])[0] = ans;
   }
   return true;
 }

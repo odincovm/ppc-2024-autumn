@@ -27,8 +27,8 @@ TEST(Parallel_MPI_count, sz_0) {
   char str1[] = "";
   char str2[] = "";
   std::vector<char*> in{str1, str2};
-  std::vector<size_t> out(1, 1);
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out(1, 1);
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -67,8 +67,8 @@ TEST(Parallel_MPI_count, sz_1) {
   std::string s1 = get_random_str(1);
   std::string s2 = get_random_str(1);
   std::vector<char*> in{s1.data(), s2.data()};
-  std::vector<size_t> out(1, 1);
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out(1, 1);
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -106,8 +106,8 @@ TEST(Parallel_MPI_count, sz_36) {
   std::string s1 = get_random_str(36);
   std::string s2 = get_random_str(36);
   std::vector<char*> in{s1.data(), s2.data()};
-  std::vector<size_t> out(1, 1);
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out(1, 1);
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -143,12 +143,12 @@ TEST(Parallel_MPI_count, sz_36) {
 TEST(Parallel_MPI_count, sz_24) {
   // Create data
   boost::mpi::communicator com;
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out_s(1, 1);
   std::string s1 = get_random_str(24);
   std::string s2 = get_random_str(24);
 
   std::vector<char*> in{s1.data(), s2.data()};
-  std::vector<size_t> out(1, 1);
+  std::vector<int> out(1, 1);
 
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -188,8 +188,8 @@ TEST(Parallel_MPI_count, df_sz_15) {
   std::string s2 = get_random_str(12);
 
   std::vector<char*> in{s1.data(), s2.data()};
-  std::vector<size_t> out(1, 1);
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out(1, 1);
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {
@@ -228,8 +228,8 @@ TEST(Parallel_MPI_count, df_sz_25) {
   std::string s2 = get_random_str(12);
 
   std::vector<char*> in{s1.data(), s2.data()};
-  std::vector<size_t> out(1, 1);
-  std::vector<size_t> out_s(1, 1);
+  std::vector<int> out(1, 1);
+  std::vector<int> out_s(1, 1);
   // Create Task Data Parallel
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   if (com.rank() == 0) {

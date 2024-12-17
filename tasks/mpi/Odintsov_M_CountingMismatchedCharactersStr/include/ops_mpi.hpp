@@ -34,7 +34,7 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
  private:
   std::vector<std::string> local_input;
   std::vector<char*> input;
-  size_t ans{};
+  int ans{};
   boost::mpi::communicator com;
 };
 }  // namespace Odintsov_M_CountingMismatchedCharactersStr_mpi
