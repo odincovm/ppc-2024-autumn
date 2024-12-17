@@ -174,8 +174,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   broadcast(com, loc_constr_size, 0);
   broadcast(com, step, 0);
 
-  fflush(stdout);
-
   if (com.rank() != 0) {
     area.resize(4);
   }
@@ -210,77 +208,77 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
     loc_area[i] = area[i];
   }
 
-  if (!local_constraint.empty()) {
-    while (current_step >= tolerance) {
-      double local_minX = loc_area[0];
-      double local_minY = loc_area[2];
+  while (current_step >= tolerance) {
+    double local_minX = loc_area[0];
+    double local_minY = loc_area[2];
 
-      int scale_factor = static_cast<int>(1.0 / current_step);
-      int int_minX = static_cast<int>(loc_area[0] * scale_factor);
-      int int_maxX = static_cast<int>(loc_area[1] * scale_factor);
-      int int_minY = static_cast<int>(loc_area[2] * scale_factor);
-      int int_maxY = static_cast<int>(loc_area[3] * scale_factor);
+    int scale_factor = static_cast<int>(1.0 / current_step);
+    int int_minX = static_cast<int>(loc_area[0] * scale_factor);
+    int int_maxX = static_cast<int>(loc_area[1] * scale_factor);
+    int int_minY = static_cast<int>(loc_area[2] * scale_factor);
+    int int_maxY = static_cast<int>(loc_area[3] * scale_factor);
 
-      for (int x = int_minX; x < int_maxX; x++) {
-        for (int y = int_minY; y < int_maxY; y++) {
-          double real_x = x / static_cast<double>(scale_factor);
-          double real_y = y / static_cast<double>(scale_factor);
+    for (int x = int_minX; x < int_maxX; x++) {
+      for (int y = int_minY; y < int_maxY; y++) {
+        double real_x = x / static_cast<double>(scale_factor);
+        double real_y = y / static_cast<double>(scale_factor);
 
-          int loc_flag = 1;
-          for (int i = 0; i < loc_constr_size; i++) {
-            if (!satisfies_constraints(real_x, real_y, i)) {
-              loc_flag = 0;
+        int loc_flag = 1;
+        int constr_sz = local_constraint.size() / 3;
+        for (int i = 0; i < constr_sz; i++) {
+          if (!satisfies_constraints(real_x, real_y, i)) {
+            loc_flag = 0;
+            break;
+          }
+        }
+
+        gather(com, loc_flag, is_corret, 0);
+
+        if (com.rank() == 0) {
+          bool flag = true;
+          int sz = is_corret.size();
+          for (int i = 0; i < sz; i++) {
+            if (is_corret[i] == 0) {
+              flag = false;
               break;
             }
           }
-
-          gather(com, loc_flag, is_corret, 0);
-
-          if (com.rank() == 0) {
-            bool flag = true;
-            int sz = is_corret.size();
-            for (int i = 0; i < sz; i++) {
-              if (is_corret[i] == 0) {
-                flag = false;
-                break;
+          if (flag) {
+            double value = calculate_function(real_x, real_y);
+            if (ver == 0) {
+              if (value < ans) {
+                ans = value;
+                local_minX = real_x;
+                local_minY = real_y;
               }
-            }
-            if (flag) {
-              double value = calculate_function(real_x, real_y);
-              if (ver == 0) {
-                if (value < ans) {
-                  ans = value;
-                  local_minX = real_x;
-                  local_minY = real_y;
-                }
-              } else if (ver == 1) {
-                ans = std::max(ans, value);
-              }
+            } else if (ver == 1) {
+              ans = std::max(ans, value);
             }
           }
         }
       }
-
-      if (com.rank() == 0) {
-        if ((std::abs(previous_ans - ans) < tolerance)) {
-          current_step = -1;
-        }
-        std::vector<double> new_area = loc_area;
-
-        // Уточняем границы
-        new_area[0] = std::max(local_minX - 2 * current_step, area[0]);
-        new_area[1] = std::min(local_minX + 2 * current_step, area[1]);
-        new_area[2] = std::max(local_minY - 2 * current_step, area[2]);
-        new_area[3] = std::min(local_minY + 2 * current_step, area[3]);
-
-        loc_area = new_area;
-        previous_ans = ans;
-      }
-
-      broadcast(com, loc_area.data(), area.size(), 0);
-      broadcast(com, current_step, 0);
     }
+
+    if (com.rank() == 0) {
+      if ((std::abs(previous_ans - ans) < tolerance)) {
+        current_step = -1;
+      }
+      std::vector<double> new_area = loc_area;
+
+      // Уточняем границы
+      new_area[0] = std::max(local_minX - 2 * current_step, area[0]);
+      new_area[1] = std::min(local_minX + 2 * current_step, area[1]);
+      new_area[2] = std::max(local_minY - 2 * current_step, area[2]);
+      new_area[3] = std::min(local_minY + 2 * current_step, area[3]);
+
+      loc_area = new_area;
+      previous_ans = ans;
+    }
+
+    broadcast(com, loc_area.data(), area.size(), 0);
+    broadcast(com, current_step, 0);
   }
+
   return true;
 }
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::post_processing() {
