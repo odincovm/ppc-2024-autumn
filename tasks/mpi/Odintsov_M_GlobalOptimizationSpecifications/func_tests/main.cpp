@@ -80,8 +80,8 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_0) {
 }
 TEST(Odintsov_M_OptimPar_MPI, test_min_1) {
   // Create data
-  boost::mpi::communicator com;
   double step = 0.3;
+  boost::mpi::communicator com;
   std::vector<double> area = {-10, 10, -10, 10};
   std::vector<double> func = createFunc(-10, 10);
   std::vector<double> constraint = creareConstr(-10, 10, 36);
