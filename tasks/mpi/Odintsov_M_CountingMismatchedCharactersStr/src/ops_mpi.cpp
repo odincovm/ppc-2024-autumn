@@ -119,12 +119,18 @@ bool CountingCharacterMPIParallel::run() {
   //printf("[Rang %i] str1 %s str2 %s\n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
   //fflush(stdout);
   size_t size_1 = local_input[0].size();
-
-  for (size_t i = 0; i < size_1; i++) {
-    if (local_input[0][i] != local_input[1][i]) {
-      loc_res += 2;
+  //printf("Rang %i size %zu\n", com.rank(), size_1);
+  //fflush(stdout);
+  auto *it1 = input[0];
+  auto *it2 = input[1];
+  while (*it1 != '\0' && *it2 != '\0') {
+    if (*it1 != *it2) {
+      ans += 2;
     }
+    ++it1;
+    ++it2;
   }
+  loc_res += std::strlen(it1) + std::strlen(it2);
 
   reduce(com, loc_res, ans, std::plus(), 0);
   return true;
