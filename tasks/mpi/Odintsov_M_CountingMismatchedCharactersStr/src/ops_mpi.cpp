@@ -125,7 +125,7 @@ bool CountingCharacterMPIParallel::run() {
     }
   }
 
-  reduce(com, loc_res, ans, std::plus<size_t>(), 0);
+  reduce(com, loc_res, ans, std::plus(), 0);
   return true;
 }
 
