@@ -8,14 +8,14 @@ using namespace std::chrono_literals;
 
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::validation() {
   internal_order_test();
-  // Проверка на то, что у нас 2 строки на входе и одно число на выходе
+
   bool ans_out = (taskData->inputs_count[0] == 2);
   bool ans_in = (taskData->outputs_count[0] == 1);
   return (ans_in) && (ans_out);
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::pre_processing() {
   internal_order_test();
-  // инициализация инпута
+
   if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >= strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
     input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
@@ -23,7 +23,7 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
     input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
     input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
   }
-  // Инициализация ответа
+
   ans = 0;
   return true;
 }

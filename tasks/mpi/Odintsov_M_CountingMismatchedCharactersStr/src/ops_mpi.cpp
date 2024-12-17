@@ -9,17 +9,16 @@
 using namespace std::chrono_literals;
 using namespace Odintsov_M_CountingMismatchedCharactersStr_mpi;
 
-// Последовательная версия
 bool CountingCharacterMPISequential::validation() {
   internal_order_test();
-  // Проверка на то, что у нас 2 строки на входе и одно число на выходе
+
   bool ans_out = (taskData->inputs_count[0] == 2);
   bool ans_in = (taskData->outputs_count[0] == 1);
   return (ans_in) && (ans_out);
 }
 bool CountingCharacterMPISequential::pre_processing() {
   internal_order_test();
-  // инициализация инпута
+
   if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >= strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
     input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
@@ -27,7 +26,7 @@ bool CountingCharacterMPISequential::pre_processing() {
     input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
     input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
   }
-  // Инициализация ответа
+
   ans = 0;
   return true;
 }
@@ -50,10 +49,10 @@ bool CountingCharacterMPISequential::post_processing() {
   reinterpret_cast<size_t *>(taskData->outputs[0])[0] = ans;
   return true;
 }
-// Параллельная версия
+
 bool CountingCharacterMPIParallel::validation() {
   internal_order_test();
-  // Проверка на то, что у нас 2 строки на входе и одно число на выходе
+
   if (com.rank() == 0) {
     bool ans_out = (taskData->inputs_count[0] == 2);
     bool ans_in = (taskData->outputs_count[0] == 1);
@@ -65,7 +64,6 @@ bool CountingCharacterMPIParallel::validation() {
 bool CountingCharacterMPIParallel::pre_processing() {
   internal_order_test();
   if (com.rank() == 0) {
-    // инициализация инпута
     if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >=
         strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
       input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
@@ -74,7 +72,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
       input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
       input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     }
-    // Слчай если строки разной длины
+
     if (strlen(input[0]) != (strlen(input[1]))) {
       ans = strlen(input[0]) - strlen(input[1]);
       input[0][strlen(input[1])] = '\0';
@@ -89,12 +87,11 @@ bool CountingCharacterMPIParallel::run() {
 
   size_t loc_size = 0;
   size_t loc_res = 0;
-  // Инициализация в 0 потоке
+
   if (com.rank() == 0) {
     loc_size = (strlen(input[0]) + com.size() - 1) / com.size();
   }
 
-  // Рассылка loc_size всем потокам
   broadcast(com, loc_size, 0);
 
   if (com.rank() == 0) {
