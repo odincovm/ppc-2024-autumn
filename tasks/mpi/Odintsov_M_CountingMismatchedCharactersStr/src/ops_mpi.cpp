@@ -121,8 +121,8 @@ bool CountingCharacterMPIParallel::run() {
   //size_t size_1 = local_input[0].size();
   //printf("Rang %i size %zu\n", com.rank(), size_1);
   //fflush(stdout);
-  auto *it1 = input[0];
-  auto *it2 = input[1];
+  auto *it1 = local_input[0].c_str();
+  auto *it2 = local_input[1].c_str();
   while (*it1 != '\0' && *it2 != '\0') {
     if (*it1 != *it2) {
       ans += 2;
