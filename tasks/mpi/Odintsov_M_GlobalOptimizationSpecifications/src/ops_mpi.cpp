@@ -89,7 +89,11 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
               local_minY = real_y;
             }
           } else if (ver == 1) {
-            ans = std::max(ans, value);
+            if (value > ans) {
+              ans = value;
+              local_minX = real_x;
+              local_minY = real_y;
+            }
           }
         }
       }
@@ -252,7 +256,11 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
                 local_minY = real_y;
               }
             } else if (ver == 1) {
-              ans = std::max(ans, value);
+              if (value > ans) {
+                ans = value;
+                local_minX = real_x;
+                local_minY = real_y;
+              }
             }
           }
         }
