@@ -1,5 +1,4 @@
-﻿
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
@@ -7,7 +6,7 @@
 
 #include "mpi/Odintsov_M_CountingMismatchedCharactersStr/include/ops_mpi.hpp"
 
-static std::string get_random_str(size_t sz) {
+std::string get_random_str(size_t sz) {
   const char characters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrswxyz0123456789";
   std::string str;
 
@@ -16,7 +15,7 @@ static std::string get_random_str(size_t sz) {
   for (size_t i = 0; i < sz; ++i) {
     // Генерируем случайный индекс
     int index = std::rand() % (sizeof(characters) - 1);
-    str += characters[index];
+    str = characters[index];
   }
 
   return str;
@@ -35,7 +34,6 @@ TEST(Parallel_MPI_count, sz_0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(0);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
@@ -76,13 +74,11 @@ TEST(Parallel_MPI_count, sz_1) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(1);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
 
   Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPIParallel testClassPar(taskDataPar);
-
   ASSERT_EQ(testClassPar.validation(), true);
   testClassPar.pre_processing();
   testClassPar.run();
@@ -117,7 +113,6 @@ TEST(Parallel_MPI_count, sz_36) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(36);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
@@ -133,7 +128,6 @@ TEST(Parallel_MPI_count, sz_36) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataSeq->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(36);
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());
     Odintsov_M_CountingMismatchedCharactersStr_mpi::CountingCharacterMPISequential testClassSeq(taskDataSeq);
@@ -161,7 +155,6 @@ TEST(Parallel_MPI_count, sz_24) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(24);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
@@ -202,7 +195,6 @@ TEST(Parallel_MPI_count, df_sz_15) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(12);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }
@@ -243,7 +235,6 @@ TEST(Parallel_MPI_count, df_sz_25) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[0]));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(in[1]));
     taskDataPar->inputs_count.emplace_back(in.size());
-    taskDataPar->inputs_count.emplace_back(12);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
   }

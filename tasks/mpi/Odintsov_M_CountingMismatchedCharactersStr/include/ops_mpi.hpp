@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <boost/mpi/collectives.hpp>
@@ -20,7 +19,7 @@ class CountingCharacterMPISequential : public ppc::core::Task {
 
  private:
   std::vector<char*> input;
-  size_t ans{};
+  int ans{};
 };
 
 class CountingCharacterMPIParallel : public ppc::core::Task {
@@ -34,7 +33,6 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
  private:
   std::vector<std::string> local_input;
   std::vector<char*> input;
-  int input_sz;
   int ans{};
   boost::mpi::communicator com;
 };
