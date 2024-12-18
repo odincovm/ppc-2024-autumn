@@ -215,7 +215,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
     taskDataSeq->inputs_count.emplace_back(12);  // Количество ограничений
-    taskDataSeq->inputs_count.emplace_back(1);   // Режим
+    taskDataSeq->inputs_count.emplace_back(1);   
 
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
     taskDataSeq->outputs_count.emplace_back(out_s.size());
