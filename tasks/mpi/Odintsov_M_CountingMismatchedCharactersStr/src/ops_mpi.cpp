@@ -32,16 +32,12 @@ bool CountingCharacterMPISequential::pre_processing() {
 }
 bool CountingCharacterMPISequential::run() {
   internal_order_test();
-  auto *it1 = input[0];
-  auto *it2 = input[1];
-  while (*it1 != '\0' && *it2 != '\0') {
-    if (*it1 != *it2) {
+  size_t size_1 = strlen(input[0]);
+  for (size_t i = 0; i < size_1; i++) {
+    if (input[0][i] != input[1][i]) {
       ans += 2;
     }
-    ++it1;
-    ++it2;
   }
-  ans += std::strlen(it1) + std::strlen(it2);
   return true;
 }
 bool CountingCharacterMPISequential::post_processing() {
@@ -129,7 +125,7 @@ bool CountingCharacterMPIParallel::run() {
   }
 
   if (!local_input.empty()) {
-    printf("Rang %i str1 %s str2 %s\n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
+    //printf("Rang %i str1 %s str2 %s\n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
     size_t size_1 = local_input[0].size();
     for (size_t i = 0; i < size_1; i++) {
       if (local_input[0][i] != local_input[1][i]) { 
