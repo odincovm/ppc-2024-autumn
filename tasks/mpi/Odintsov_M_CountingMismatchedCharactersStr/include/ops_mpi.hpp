@@ -34,6 +34,7 @@ class CountingCharacterMPIParallel : public ppc::core::Task {
  private:
   std::vector<std::string> local_input;
   std::vector<char*> input;
+  int input_sz;
   int ans{};
   boost::mpi::communicator com;
 };

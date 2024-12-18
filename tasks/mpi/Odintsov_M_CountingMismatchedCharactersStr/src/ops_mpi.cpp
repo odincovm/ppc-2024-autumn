@@ -79,60 +79,69 @@ bool CountingCharacterMPIParallel::pre_processing() {
     } else {
       ans = 0;
     }
+    input_sz = strlen(input[0]);
   }
   return true;
 }
 bool CountingCharacterMPIParallel::run() {
   internal_order_test();
-
+  
   size_t loc_size = 0;
   int loc_res = 0;
+  local_input.resize(0);
 
   if (com.rank() == 0) {
-    loc_size = (strlen(input[0]) + com.size() - 1) / com.size();
-  }
+    loc_size = (input_sz + com.size() - 1) / com.size();
 
+  }
+  broadcast(com, input_sz, 0);
   broadcast(com, loc_size, 0);
+
 
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
-      int send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
-
-      com.send(pr, 0, input[0] + pr * loc_size, send_size);
-      com.send(pr, 0, input[1] + pr * loc_size, send_size);
+      int send_size = std::min(loc_size, input_sz - pr * loc_size);
+      if (send_size >= 1) {
+        com.send(pr, 0, input[0] + pr * loc_size, send_size);
+        com.send(pr, 0, input[1] + pr * loc_size, send_size);
+      }   
     }
-    std::string str1(input[0], loc_size);
-    std::string str2(input[1], loc_size);
-    local_input.push_back(str1);
-    local_input.push_back(str2);
-
+    if (strlen(input[0]) != 0) {
+      std::string str1(input[0], loc_size);
+      std::string str2(input[1], loc_size);
+      local_input.push_back(str1);
+      local_input.push_back(str2);
+    }
   } else {
+
+    int get_size = std::min(loc_size, input_sz - com.rank() * loc_size);
+
     std::string str1(loc_size, '0');
     std::string str2(loc_size, '0');
 
-    com.recv(0, 0, str1.data(), loc_size);
-    com.recv(0, 0, str2.data(), loc_size);
-
-    local_input.push_back(str1);
-    local_input.push_back(str2);
-  }
-  //printf("[Rang %i] str1 %s str2 %s\n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
-  //fflush(stdout);
-  //size_t size_1 = local_input[0].size();
-  //printf("Rang %i size %zu\n", com.rank(), size_1);
-  //fflush(stdout);
-  auto *it1 = local_input[0].c_str();
-  auto *it2 = local_input[1].c_str();
-  while (*it1 != '\0' && *it2 != '\0') {
-    if (*it1 != *it2) {
-      ans += 2;
+    if (get_size > 0) {
+      com.recv(0, 0, str1.data(), get_size);
+      com.recv(0, 0, str2.data(), get_size);
+      local_input.push_back(str1);
+      local_input.push_back(str2);
     }
-    ++it1;
-    ++it2;
+    
   }
-  loc_res += std::strlen(it1) + std::strlen(it2);
+
+  if (!local_input.empty()) {
+    printf("Rang %i str1 %s str2 %s\n", com.rank(), local_input[0].c_str(), local_input[1].c_str());
+    size_t size_1 = local_input[0].size();
+    for (size_t i = 0; i < size_1; i++) {
+      if (local_input[0][i] != local_input[1][i]) { 
+        loc_res += 2;
+      }
+    }
+  }
+
 
   reduce(com, loc_res, ans, std::plus(), 0);
+ 
+
   return true;
 }
 
