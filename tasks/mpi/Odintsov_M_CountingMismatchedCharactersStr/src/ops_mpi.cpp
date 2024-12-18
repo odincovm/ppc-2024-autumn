@@ -79,7 +79,7 @@ bool CountingCharacterMPIParallel::pre_processing() {
     } else {
       ans = 0;
     }
-    input_sz = strlen(input[0]);
+    input_sz = taskData->inputs_count[1];
   }
   return true;
 }
