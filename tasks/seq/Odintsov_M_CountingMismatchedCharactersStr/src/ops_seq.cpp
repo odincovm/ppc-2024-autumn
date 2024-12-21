@@ -15,15 +15,8 @@ bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential
 }
 bool Odintsov_M_CountingMismatchedCharactersStr_seq::CountingCharacterSequential::pre_processing() {
   internal_order_test();
-
-  if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >= strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
-    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
-    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
-  } else {
-    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
-    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
-  }
-
+  input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
+  input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
   ans = 0;
   return true;
 }

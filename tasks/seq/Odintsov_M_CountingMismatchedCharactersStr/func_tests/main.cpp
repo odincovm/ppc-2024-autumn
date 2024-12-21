@@ -135,7 +135,7 @@ TEST(Odintsov_m_Sequential_count, ans_22) {
 TEST(Odintsov_m_Sequential_count, ans_46) {
   // Create data
   char str1[] = "qwertaqvsdfemmqwfweegwegre";
-  char str2[] = "asdfgsfefgfsmmfbthjykukiyl";
+  char str2[] = "asdfgsfefgfsmm";
 
   std::vector<char*> in{str1, str2};
   std::vector<int> out(1, 1);
@@ -154,5 +154,5 @@ TEST(Odintsov_m_Sequential_count, ans_46) {
   testClass.pre_processing();
   testClass.run();
   testClass.post_processing();
-  ASSERT_EQ(46, out[0]);
+  ASSERT_EQ(34, out[0]);
 }

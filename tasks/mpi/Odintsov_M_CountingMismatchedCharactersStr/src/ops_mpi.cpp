@@ -66,14 +66,8 @@ bool CountingCharacterMPIParallel::pre_processing() {
   internal_order_test();
   if (com.rank() == 0) {
     // инициализация инпута
-    if (strlen(reinterpret_cast<char *>(taskData->inputs[0])) >=
-        strlen(reinterpret_cast<char *>(taskData->inputs[1]))) {
-      input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
-      input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
-    } else {
-      input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
-      input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
-    }
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
+    input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
     // Слчай если строки разной длины
     if (strlen(input[0]) != (strlen(input[1]))) {
       ans = strlen(input[0]) - strlen(input[1]);
