@@ -15,9 +15,8 @@ std::string get_random_str(size_t sz) {
   for (size_t i = 0; i < sz; ++i) {
     // Генерируем случайный индекс
     int index = std::rand() % (sizeof(characters) - 1);
-    str = characters[index];
+    str += characters[index];
   }
-
   return str;
 }
 TEST(Odintsov_m_Parallel_MPI_count, sz_0) {
