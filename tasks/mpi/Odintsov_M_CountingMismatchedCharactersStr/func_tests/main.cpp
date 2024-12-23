@@ -219,10 +219,11 @@ TEST(Odintsov_m_Parallel_MPI_count, df_sz_15) {
     ASSERT_EQ(out[0], out_s[0]);
   }
 }
+
 TEST(Odintsov_m_Parallel_MPI_count, df_sz_25) {
   // Create data//
   boost::mpi::communicator com;
-  std::string s1 = get_random_str(13);
+  std::string s1 = get_random_str(24);
   std::string s2 = get_random_str(12);
 
   std::vector<char*> in{s1.data(), s2.data()};

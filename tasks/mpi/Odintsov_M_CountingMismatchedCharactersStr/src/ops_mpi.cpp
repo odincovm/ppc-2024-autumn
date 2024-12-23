@@ -69,12 +69,11 @@ bool CountingCharacterMPIParallel::pre_processing() {
     input.push_back(reinterpret_cast<char *>(taskData->inputs[0]));
     input.push_back(reinterpret_cast<char *>(taskData->inputs[1]));
     // Слчай если строки разной длины
-    if (strlen(input[0]) != (strlen(input[1]))) {
+    if (strlen(input[1]) < strlen(input[0])) {
       ans = strlen(input[0]) - strlen(input[1]);
       input[0][strlen(input[1])] = '\0';
-    } else {
-      ans = 0;
     }
+    ans = 0;
   }
   return true;
 }
@@ -103,8 +102,8 @@ bool CountingCharacterMPIParallel::run() {
     local_input.push_back(str1);
     local_input.push_back(str2);
   } else {
-    std::string str1('0', loc_size);
-    std::string str2('0', loc_size);
+    std::string str1(loc_size, '\0');
+    std::string str2(loc_size, '\0');
     com.recv(0, 0, str1.data(), loc_size);
     com.recv(0, 0, str2.data(), loc_size);
     local_input.push_back(str1);
