@@ -55,4 +55,7 @@ class GlobalOptimizationSpecificationsMPIParallel : public ppc::core::Task {
   int loc_constr_size;
   std::vector<int> is_corret;
 };
+// Объявления friend-функций в пространстве имен
+bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> constraint);
+double calculate_function(double x, double y, std::vector<double> func);
 }  // namespace Odintsov_M_GlobalOptimizationSpecifications_mpi
