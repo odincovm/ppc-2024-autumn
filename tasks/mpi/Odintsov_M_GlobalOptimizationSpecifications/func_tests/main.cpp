@@ -229,7 +229,6 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    ASSERT_EQ(1, 0);
     ASSERT_EQ(out, out_s);
   }
 }
