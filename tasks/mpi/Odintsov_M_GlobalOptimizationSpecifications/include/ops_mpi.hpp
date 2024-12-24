@@ -19,8 +19,8 @@ class GlobalOptimizationSpecificationsMPISequential : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  bool satisfies_constraints(double x, double y, int number_constraint);
-  double calculate_function(double x, double y);
+  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> constr);
+  friend double calculate_function(double x, double y, std::vector<double> func);
   double step;
   std::vector<double> area;   // Содержит 4 числа - границы области
   std::vector<double> funct;  // Содержит 2 числа (a,b) с помощью которых будет генерироваться функция (x-a)^2+(y-b)^2
@@ -40,8 +40,8 @@ class GlobalOptimizationSpecificationsMPIParallel : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  bool satisfies_constraints(double x, double y, int number_constraint);
-  double calculate_function(double x, double y);
+  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> costr);
+  friend double calculate_function(double x, double y, std::vector<double> func);
   double step;
   std::vector<double> area;   // Содержит 4 числа - границы области
   std::vector<double> funct;  // Содержит 2 числа (a,b) с помощью которых будет генерироваться функция (x-a)^2+(y-b)^2

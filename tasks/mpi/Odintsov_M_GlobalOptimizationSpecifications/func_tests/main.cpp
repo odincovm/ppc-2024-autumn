@@ -13,10 +13,14 @@
 
 static std::vector<double> createFunc(int min, int max) {
   std::vector<double> func(2, 0);
-  srand(time(nullptr));
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dist(min, max);
+
   for (int i = 0; i < 2; i++) {
-    func[i] = (min + rand() % (max - min + 1));
+    func[i] = dist(gen);
   }
+
   return func;
 }
 
@@ -32,7 +36,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_0) {
   // Create data
   boost::mpi::communicator com;
   double step = 0.3;
-  std::vector<double> area = {-10, 10, -10, 10};
+  std::vector<double> area = {0.0000001, 0.0000002, 0.0000001, 0.0000002};
   std::vector<double> func = createFunc(-10, 10);
   std::vector<double> constraint = creareConstr(-10, 10, 1);
   std::vector<double> out = {0};
@@ -132,7 +136,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_min_2) {
   // Create data
   boost::mpi::communicator com;
   double step = 0.3;
-  std::vector<double> area = {-10, 10, -10, 10};
+  std::vector<double> area = {-17, 6, 13, 23};
   std::vector<double> func = createFunc(-10, 10);
   std::vector<double> constraint = creareConstr(-10, 10, 24);
   std::vector<double> out = {0};
@@ -182,9 +186,9 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
   // Create data
   boost::mpi::communicator com;
   double step = 0.3;
-  std::vector<double> area = {-10, 10, -10, 10};
+  std::vector<double> area = {-20, -10, -20, -10};
   std::vector<double> func = createFunc(-10, 10);
-  std::vector<double> constraint = creareConstr(-10, 10, 12);
+  std::vector<double> constraint = creareConstr(1, 3, 1);
   std::vector<double> out = {0};
   std::vector<double> out_s = {0};
   // Create Task Data Parallel
@@ -194,7 +198,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-    taskDataPar->inputs_count.emplace_back(12);
+    taskDataPar->inputs_count.emplace_back(1);
     taskDataPar->inputs_count.emplace_back(1);
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
     taskDataPar->outputs_count.emplace_back(out.size());
@@ -214,7 +218,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
-    taskDataSeq->inputs_count.emplace_back(12);  // Количество ограничений
+    taskDataSeq->inputs_count.emplace_back(1);  // Количество ограничений
     taskDataSeq->inputs_count.emplace_back(1);
 
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
@@ -225,6 +229,7 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     testClassSeq.pre_processing();
     testClassSeq.run();
     testClassSeq.post_processing();
-    ASSERT_EQ(out_s, out);
+    ASSERT_EQ(1, 0);
+    ASSERT_EQ(out, out_s);
   }
 }

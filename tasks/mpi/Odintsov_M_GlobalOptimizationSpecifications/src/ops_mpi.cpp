@@ -1,19 +1,16 @@
 ﻿
 #include "mpi/Odintsov_M_GlobalOptimizationSpecifications/include/ops_mpi.hpp"
 
-using namespace std::chrono_literals;
-
-bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::
-    satisfies_constraints(double x, double y, int number_constraint) {
+bool Odintsov_M_GlobalOptimizationSpecifications_mpi::satisfies_constraints(double x, double y, int number_constraint,
+                                                                            std::vector<double> constraint) {
   double check = constraint[number_constraint * 3] * x + constraint[number_constraint * 3 + 1] * y -
                  constraint[number_constraint * 3 + 2];
   return check <= 0;
 }
 
-double
-Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::calculate_function(
-    double x, double y) {
-  return (x - funct[0]) * (x - funct[0]) + (y - funct[1]) * (y - funct[1]);
+double Odintsov_M_GlobalOptimizationSpecifications_mpi::calculate_function(double x, double y,
+                                                                           std::vector<double> func) {
+  return (x - func[0]) * (x - func[0]) + (y - func[1]) * (y - func[1]);
 }
 
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential::validation() {
@@ -35,6 +32,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   }
 
   count_constraint = taskData->inputs_count[0];
+  constraint.resize(count_constraint * 3);
   ver = taskData->inputs_count[1];
 
   for (int i = 0; i < 2; i++) {
@@ -42,7 +40,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   }
 
   for (int i = 0; i < count_constraint * 3; i++) {
-    constraint.push_back(reinterpret_cast<double*>(taskData->inputs[2])[i]);
+    constraint[i] = (reinterpret_cast<double*>(taskData->inputs[2])[i]);
   }
 
   return true;
@@ -76,12 +74,13 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
 
         bool is_point_correct = true;
         for (int i = 0; i < count_constraint; i++) {
-          is_point_correct = satisfies_constraints(real_x, real_y, i);
+          is_point_correct = satisfies_constraints(real_x, real_y, i, constraint);
           if (!is_point_correct) break;
         }
 
         if (is_point_correct) {
-          double value = calculate_function(real_x, real_y);
+          double value = calculate_function(real_x, real_y, funct);
+
           if (ver == 0) {
             if (value < ans) {
               ans = value;
@@ -121,17 +120,6 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
   return true;
 }
 
-bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::
-    satisfies_constraints(double x, double y, int number_constraint) {
-  double check = local_constraint[number_constraint * 3] * x + local_constraint[number_constraint * 3 + 1] * y -
-                 local_constraint[number_constraint * 3 + 2];
-  return check <= 0;
-}
-
-double Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::calculate_function(
-    double x, double y) {
-  return (x - funct[0]) * (x - funct[0]) + (y - funct[1]) * (y - funct[1]);
-}
 bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel::validation() {
   internal_order_test();
   if (com.rank() == 0) {
@@ -230,7 +218,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
         int loc_flag = 1;
         int constr_sz = local_constraint.size() / 3;
         for (int i = 0; i < constr_sz; i++) {
-          if (!satisfies_constraints(real_x, real_y, i)) {
+          if (!satisfies_constraints(real_x, real_y, i, local_constraint)) {
             loc_flag = 0;
             break;
           }
@@ -248,7 +236,7 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
             }
           }
           if (flag) {
-            double value = calculate_function(real_x, real_y);
+            double value = calculate_function(real_x, real_y, funct);
             if (ver == 0) {
               if (value < ans) {
                 ans = value;
