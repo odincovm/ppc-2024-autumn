@@ -71,16 +71,16 @@ bool Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecific
       for (int y = int_minY; y < int_maxY; y++) {
         double real_x = x / static_cast<double>(scale_factor);
         double real_y = y / static_cast<double>(scale_factor);
-
         bool is_point_correct = true;
         for (int i = 0; i < count_constraint; i++) {
           is_point_correct = satisfies_constraints(real_x, real_y, i, constraint);
-          if (!is_point_correct) break;
-        }
 
+          if (!is_point_correct) {
+            break;
+          }
+        }
         if (is_point_correct) {
           double value = calculate_function(real_x, real_y, funct);
-
           if (ver == 0) {
             if (value < ans) {
               ans = value;

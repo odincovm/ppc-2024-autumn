@@ -232,3 +232,53 @@ TEST(Odintsov_M_OptimPar_MPI, test_max_1) {
     ASSERT_EQ(out, out_s);
   }
 }
+TEST(Odintsov_M_OptimPar_MPI, test_min_3) {
+  // Create data
+  double step = 0.3;
+  boost::mpi::communicator com;
+  std::vector<double> area = {30, 40, 30, 40};
+  std::vector<double> func = createFunc(-10, 10);
+  std::vector<double> constraint = creareConstr(-10, -1, 36);
+  std::vector<double> out = {0};
+  std::vector<double> out_s = {0};
+  // Create Task Data Parallel
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+  if (com.rank() == 0) {
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(area.data()));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
+    taskDataPar->inputs_count.emplace_back(36);
+    taskDataPar->inputs_count.emplace_back(0);
+    taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(out.data()));
+    taskDataPar->outputs_count.emplace_back(out.size());
+  }
+
+  // Create Task
+  Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPIParallel testClassPar(
+      taskDataPar);
+
+  ASSERT_EQ(testClassPar.validation(), true);
+  testClassPar.pre_processing();
+  testClassPar.run();
+  testClassPar.post_processing();
+  if (com.rank() == 0) {
+    std::shared_ptr<ppc::core::TaskData> taskDataSeq = std::make_shared<ppc::core::TaskData>();
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(area.data()));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(func.data()));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(constraint.data()));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&step));
+    taskDataSeq->inputs_count.emplace_back(36);  // Количество ограничений
+    taskDataSeq->inputs_count.emplace_back(0);   // Режим
+
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(out_s.data()));
+    taskDataSeq->outputs_count.emplace_back(out_s.size());
+    Odintsov_M_GlobalOptimizationSpecifications_mpi::GlobalOptimizationSpecificationsMPISequential testClassSeq(
+        taskDataSeq);
+    ASSERT_EQ(testClassSeq.validation(), true);
+    testClassSeq.pre_processing();
+    testClassSeq.run();
+    testClassSeq.post_processing();
+    ASSERT_EQ(out_s, out);
+  }
+}
