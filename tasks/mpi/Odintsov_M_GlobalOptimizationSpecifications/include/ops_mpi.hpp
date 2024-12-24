@@ -19,7 +19,7 @@ class GlobalOptimizationSpecificationsMPISequential : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> constr);
+  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> constraint);
   friend double calculate_function(double x, double y, std::vector<double> func);
   double step;
   std::vector<double> area;   // Содержит 4 числа - границы области
@@ -40,7 +40,7 @@ class GlobalOptimizationSpecificationsMPIParallel : public ppc::core::Task {
   bool post_processing() override;
 
  private:
-  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> costr);
+  friend bool satisfies_constraints(double x, double y, int number_constraint, std::vector<double> constraint);
   friend double calculate_function(double x, double y, std::vector<double> func);
   double step;
   std::vector<double> area;   // Содержит 4 числа - границы области
