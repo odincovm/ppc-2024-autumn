@@ -19,6 +19,7 @@ std::string get_random_str(size_t sz) {
   }
   return str;
 }
+
 TEST(Odintsov_m_Parallel_MPI_count, sz_0) {
   // Create data//
   boost::mpi::communicator com;
@@ -302,6 +303,7 @@ TEST(Odintsov_m_Parallel_MPI_count, sz_600) {
     ASSERT_EQ(out[0], out_s[0]);
   }
 }
+
 TEST(Odintsov_m_Parallel_MPI_count, sz_240) {
   // Create data
   boost::mpi::communicator com;

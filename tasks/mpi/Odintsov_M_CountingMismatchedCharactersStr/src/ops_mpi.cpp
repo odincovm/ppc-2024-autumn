@@ -90,8 +90,7 @@ bool CountingCharacterMPIParallel::run() {
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
-      size_t send_size =
-          std::min(loc_size, strlen(input[0] - pr * loc_size));  // Ограничиваем размар отправляемых данных
+      size_t send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
       com.send(pr, 0, input[0] + pr * loc_size, send_size);
       com.send(pr, 0, input[1] + pr * loc_size, send_size);
     }
