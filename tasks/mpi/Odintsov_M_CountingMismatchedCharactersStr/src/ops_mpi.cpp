@@ -81,15 +81,21 @@ bool CountingCharacterMPIParallel::run() {
   internal_order_test();
   // Пересылка
   size_t loc_size = 0;
+
   // Инициализация в 0 поток
   if (com.rank() == 0) {
+    flag = 1;
     // Инициализация loc_size;
     if (strlen(input[0]) == 0) {
-      loc_size = 0;
+      flag = 0;
+    } else if (strlen(input[0]) == 1) {
+      flag = 0;
+      if (input[0][0] != input[1][0]) ans += 2;
     } else {
       loc_size = (strlen(input[0]) + com.size() - 1) / com.size();
     }
   }
+  broadcast(com, flag, 0);
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
@@ -104,11 +110,11 @@ bool CountingCharacterMPIParallel::run() {
     if (loc_size != 0) {
       std::string str1(input[0], loc_size);
       std::string str2(input[1], loc_size);
-      local_input.push_back(str1);
-      local_input.push_back(str2);
+      local_input.emplace_back(str1);
+      local_input.emplace_back(str2);
     } else {
-      local_input.push_back("");
-      local_input.push_back("");
+      local_input.emplace_back("");
+      local_input.emplace_back("");
     }
   } else {
     if (loc_size != 0) {
@@ -116,15 +122,14 @@ bool CountingCharacterMPIParallel::run() {
       std::string str2(loc_size, '\0');
       com.recv(0, 0, str1.data(), loc_size);
       com.recv(0, 0, str2.data(), loc_size);
-      local_input.push_back(str1);
-      local_input.push_back(str2);
+      local_input.emplace_back(str1);
+      local_input.emplace_back(str2);
     } else {
-      local_input.push_back("");
-      local_input.push_back("");
+      local_input.emplace_back("");
+      local_input.emplace_back("");
     }
   }
-
-  if (loc_size != 0) {
+  if (flag) {
     size_t size_1 = local_input[0].size();
     int loc_res = 0;
     for (size_t i = 0; i < size_1; i++) {
