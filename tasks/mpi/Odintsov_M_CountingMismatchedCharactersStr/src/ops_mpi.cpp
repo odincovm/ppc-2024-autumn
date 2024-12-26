@@ -84,29 +84,44 @@ bool CountingCharacterMPIParallel::run() {
   // Инициализация в 0 поток
   if (com.rank() == 0) {
     // Инициализация loc_size;
-    loc_size = (strlen(input[0]) + com.size() - 1) /
-               com.size();  // Округляем вверх, чтобы при большем количестве потоков loc_size = 1
+    if (strlen(input[0]) == 0) {
+      loc_size = 0;
+    } else {
+      loc_size = (strlen(input[0]) + com.size() - 1) / com.size();
+    }
   }
   broadcast(com, loc_size, 0);
   if (com.rank() == 0) {
     for (int pr = 1; pr < com.size(); pr++) {
-      size_t send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
-      com.send(pr, 0, input[0] + pr * loc_size, send_size);
-      com.send(pr, 0, input[1] + pr * loc_size, send_size);
+      if (loc_size != 0) {
+        size_t send_size = std::min(loc_size, strlen(input[0]) - pr * loc_size);
+        com.send(pr, 0, input[0] + pr * loc_size, send_size);
+        com.send(pr, 0, input[1] + pr * loc_size, send_size);
+      }
     }
   }
   if (com.rank() == 0) {
-    std::string str1(input[0], loc_size);
-    std::string str2(input[1], loc_size);
-    local_input.push_back(str1);
-    local_input.push_back(str2);
+    if (loc_size != 0) {
+      std::string str1(input[0], loc_size);
+      std::string str2(input[1], loc_size);
+      local_input.push_back(str1);
+      local_input.push_back(str2);
+    } else {
+      local_input.push_back("0");
+      local_input.push_back("0");
+    }
   } else {
-    std::string str1(loc_size, '\0');
-    std::string str2(loc_size, '\0');
-    com.recv(0, 0, str1.data(), loc_size);
-    com.recv(0, 0, str2.data(), loc_size);
-    local_input.push_back(str1);
-    local_input.push_back(str2);
+    if (loc_size != 0) {
+      std::string str1(loc_size, '\0');
+      std::string str2(loc_size, '\0');
+      com.recv(0, 0, str1.data(), loc_size);
+      com.recv(0, 0, str2.data(), loc_size);
+      local_input.push_back(str1);
+      local_input.push_back(str2);
+    } else {
+      local_input.push_back("0");
+      local_input.push_back("0");
+    }
   }
   size_t size_1 = local_input[0].size();
   //  Реализация
