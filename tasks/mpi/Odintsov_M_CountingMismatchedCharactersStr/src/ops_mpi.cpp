@@ -107,8 +107,8 @@ bool CountingCharacterMPIParallel::run() {
       local_input.push_back(str1);
       local_input.push_back(str2);
     } else {
-      local_input.push_back("0");
-      local_input.push_back("0");
+      local_input.push_back("");
+      local_input.push_back("");
     }
   } else {
     if (loc_size != 0) {
@@ -119,19 +119,22 @@ bool CountingCharacterMPIParallel::run() {
       local_input.push_back(str1);
       local_input.push_back(str2);
     } else {
-      local_input.push_back("0");
-      local_input.push_back("0");
+      local_input.push_back("");
+      local_input.push_back("");
     }
   }
-  size_t size_1 = local_input[0].size();
-  //  Реализация
-  int loc_res = 0;
-  for (size_t i = 0; i < size_1; i++) {
-    if (local_input[0][i] != local_input[1][i]) {
-      loc_res += 2;
+
+  if (loc_size != 0) {
+    size_t size_1 = local_input[0].size();
+    int loc_res = 0;
+    for (size_t i = 0; i < size_1; i++) {
+      if (local_input[0][i] != local_input[1][i]) {
+        loc_res += 2;
+      }
     }
+    reduce(com, loc_res, ans, std::plus(), 0);
   }
-  reduce(com, loc_res, ans, std::plus(), 0);
+
   return true;
 }
 
