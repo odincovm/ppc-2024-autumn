@@ -129,7 +129,7 @@ bool CountingCharacterMPIParallel::run() {
       local_input.emplace_back("");
     }
   }
-  if (flag) {
+  if (flag != 0) {
     size_t size_1 = local_input[0].size();
     int loc_res = 0;
     for (size_t i = 0; i < size_1; i++) {
